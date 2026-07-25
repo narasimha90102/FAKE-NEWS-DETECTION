@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Account Settings – TruthCheck</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="logo" href="index.html"><span class="logo-dot"></span>TruthCheck</a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="verify.html" class="nav-link">Verify</a>
+    <a href="trending.html" class="nav-link">Trending</a>
+    <a href="about.html" class="nav-link">About</a>
+  </div>
+</nav>
+
+<main class="page-container" style="max-width:800px; margin: 40px auto; padding:0 24px;">
+  <div class="dash-header" style="margin-bottom:28px;">
+    <div>
+      <h1 class="dash-title">Account Settings</h1>
+      <p class="dash-subtitle">Manage security settings, change password, and account options.</p>
+    </div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:24px;">
+    <!-- Change Password -->
+    <div class="dash-card" style="padding:28px;">
+      <h3 style="font-family:'Syne',sans-serif; font-size:18px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+        <span>🔒 Change Password</span>
+      </h3>
+
+      <form onsubmit="handleChangePassword(event)" class="auth-form">
+        <div class="form-group">
+          <label class="form-label" for="current-pwd">Current Password</label>
+          <input type="password" id="current-pwd" class="form-input" required/>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label class="form-label" for="new-pwd">New Password</label>
+            <input type="password" id="new-pwd" class="form-input" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="confirm-new-pwd">Confirm New Password</label>
+            <input type="password" id="confirm-new-pwd" class="form-input" required/>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="align-self:flex-start;">Update Password</button>
+      </form>
+    </div>
+
+    <!-- App Preferences -->
+    <div class="dash-card" style="padding:28px;">
+      <h3 style="font-family:'Syne',sans-serif; font-size:18px; font-weight:700; margin-bottom:16px;">🎨 Preferences</h3>
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <label class="custom-checkbox" style="justify-content:space-between; width:100%;">
+          <span>Dark Mode (TruthCheck Core Theme)</span>
+          <div>
+            <input type="checkbox" checked disabled/>
+            <span class="checkmark">✓</span>
+          </div>
+        </label>
+        <label class="custom-checkbox" style="justify-content:space-between; width:100%;">
+          <span>Enable Toast Notifications</span>
+          <div>
+            <input type="checkbox" id="pref-toasts" checked/>
+            <span class="checkmark">✓</span>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="dash-card" style="padding:28px; border-color:rgba(239,68,68,0.3);">
+      <h3 style="font-family:'Syne',sans-serif; font-size:18px; font-weight:700; color:var(--danger); margin-bottom:8px;">⚠️ Danger Zone</h3>
+      <p style="font-size:13px; color:var(--muted2); margin-bottom:16px;">Permanently delete your TruthCheck account, saved history, and profile data.</p>
+      <button class="btn-ghost" style="color:var(--danger); border-color:var(--danger);" onclick="toggleDeleteModal()">Delete Account</button>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="delete-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); z-index:1000; align-items:center; justify-content:center;">
+    <div class="auth-card" style="max-width:400px; border-color:var(--danger);">
+      <h3 style="font-family:'Syne',sans-serif; font-size:18px; color:var(--danger); margin-bottom:8px;">Delete Account</h3>
+      <p style="font-size:13px; color:var(--muted2); margin-bottom:16px;">This action is permanent and cannot be undone. Please enter your password to confirm deletion.</p>
+      
+      <form onsubmit="handleDeleteAccount(event)" class="auth-form">
+        <div class="form-group">
+          <label class="form-label" for="delete-pwd">Confirm Password</label>
+          <input type="password" id="delete-pwd" class="form-input" required/>
+        </div>
+        
+        <div style="display:flex; gap:12px; margin-top:8px;">
+          <button type="submit" class="btn-primary" style="background:var(--danger); color:#fff; flex:1;">Confirm Delete</button>
+          <button type="button" class="btn-ghost" onclick="toggleDeleteModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<script src="auth.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    requireAuth();
+  });
+
+  function handleChangePassword(e) {
+    e.preventDefault();
+    const curPwd = document.getElementById('current-pwd').value;
+    const newPwd = document.getElementById('new-pwd').value;
+    const confPwd = document.getElementById('confirm-new-pwd').value;
+
+    const res = changeUserPassword(curPwd, newPwd, confPwd);
+    if (!res.success) {
+      showToast(res.message, 'error');
+      return;
+    }
+
+    showToast(res.message, 'success');
+    document.getElementById('current-pwd').value = '';
+    document.getElementById('new-pwd').value = '';
+    document.getElementById('confirm-new-pwd').value = '';
+  }
+
+  function toggleDeleteModal() {
+    const modal = document.getElementById('delete-modal');
+    modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+  }
+
+  function handleDeleteAccount(e) {
+    e.preventDefault();
+    const pwd = document.getElementById('delete-pwd').value;
+    const res = deleteUserAccount(pwd);
+    if (!res.success) {
+      showToast(res.message, 'error');
+      return;
+    }
+  }
+</script>
+</body>
+</html>

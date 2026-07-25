@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard – TruthCheck</title>
+  <meta name="description" content="View your personal verification analytics and dashboard."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<nav class="navbar">
+  <a class="logo" href="index.html">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 2L4 7.5V16c0 6.627 5.373 12 12 12s12-5.373 12-12V7.5L16 2Z" stroke="url(#dlg1)" stroke-width="1.5" fill="rgba(99,102,241,0.08)"/>
+      <path d="M11 16l3 3 7-7" stroke="url(#dlg2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs>
+        <linearGradient id="dlg1" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+        <linearGradient id="dlg2" x1="11" y1="12" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+      </defs>
+    </svg>
+    TruthCheck
+  </a>
+  <div class="nav-links">
+    <a href="index.html"     class="nav-link">Home</a>
+    <a href="verify.html"    class="nav-link">Verify</a>
+    <a href="trending.html"  class="nav-link">Trending</a>
+    <a href="about.html"     class="nav-link">About</a>
+  </div>
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <button class="theme-btn" id="theme-toggle-btn" aria-label="Toggle Theme" style="background:transparent;border:none;color:var(--text);display:flex;align-items:center;justify-content:center;padding:8px;border-radius:50%;cursor:pointer;">
+      <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      <svg id="theme-icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+    <a href="verify.html" class="nav-cta"><span>Try Free</span></a>
+  </div>
+</nav>
+
+<main class="page-main">
+
+  <!-- ─── PAGE HEADER ─── -->
+  <div class="page-header-block">
+    <div class="page-eyebrow">Analytics</div>
+    <h1 class="page-h1">Platform Dashboard</h1>
+    <p class="page-sub">
+      Real statistics from your actual TruthCheck verifications.
+      <a href="verify.html" style="color:var(--accent);font-weight:600;">
+        Verify more news to see live data →
+      </a>
+    </p>
+  </div>
+
+  <!-- ─── NOTICE BANNER ─── -->
+  <div class="dash-notice" id="dash-notice" style="display:none;">
+    <span>📊</span>
+    <span>
+      You have <strong id="notice-count">0</strong> checks saved.
+      Verify more news and save them to see your real analytics here.
+      <a href="verify.html" style="color:var(--accent);font-weight:600;margin-left:6px;">
+        Go Verify →
+      </a>
+    </span>
+  </div>
+
+  <!-- ─── KPI CARDS ─── -->
+  <div class="kpi-grid">
+
+    <div class="kpi-card accent">
+      <div class="kpi-icon">🔍</div>
+      <div class="kpi-num" id="kpi-total">0</div>
+      <div class="kpi-lbl">Total Checks</div>
+      <div class="kpi-delta up" id="kpi-total-sub">Your session checks</div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">🚨</div>
+      <div class="kpi-num" id="kpi-fake">0</div>
+      <div class="kpi-lbl">Fake News Found</div>
+      <div class="kpi-delta up" id="kpi-fake-sub">From your verifications</div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">✅</div>
+      <div class="kpi-num" id="kpi-verified">0</div>
+      <div class="kpi-lbl">Verified True</div>
+      <div class="kpi-delta up" id="kpi-verified-sub">Credible news found</div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon">🎯</div>
+      <div class="kpi-num" id="kpi-accuracy">0%</div>
+      <div class="kpi-lbl">Fake News Rate</div>
+      <div class="kpi-delta up" id="kpi-accuracy-sub">Of all your checks</div>
+    </div>
+
+  </div>
+
+  <!-- ─── ROW 2: Verdict + Language ─── -->
+  <div class="dash-grid-2">
+
+    <!-- Verdict Breakdown -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">Verdict Breakdown</span>
+        <span class="card-badge">Your Real Data</span>
+      </div>
+      <div class="verdict-breakdown" id="verdict-breakdown">
+        <div class="dash-empty">
+          <div class="dash-empty-icon">📊</div>
+          <p>No data yet.</p>
+          <a href="verify.html">Verify some news first →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Language Distribution -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">By Language</span>
+        <span class="card-badge">Your Real Data</span>
+      </div>
+      <div class="lang-bars" id="lang-bars">
+        <div class="dash-empty">
+          <div class="dash-empty-icon">🌐</div>
+          <p>No language data yet.</p>
+          <a href="verify.html">Verify some news first →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─── ROW 3: Topics + Weekly Chart ─── -->
+  <div class="dash-grid-2">
+
+    <!-- Top Fake News Topics -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">Top Fake News Topics</span>
+        <span class="card-badge">Your Real Data</span>
+      </div>
+      <div class="topic-list" id="topic-list">
+        <div class="dash-empty">
+          <div class="dash-empty-icon">🏷️</div>
+          <p>No topics detected yet.</p>
+          <a href="verify.html">Verify some news first →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Activity Chart -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">Weekly Activity</span>
+        <span class="card-badge">Last 7 Days</span>
+      </div>
+      <div class="weekly-chart" id="weekly-chart">
+        <div class="dash-empty">
+          <div class="dash-empty-icon">📈</div>
+          <p>No activity this week yet.</p>
+          <a href="verify.html">Verify some news first →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─── ROW 4: Recent Checks Table ─── -->
+  <div class="card" style="margin-top:0;">
+    <div class="card-head">
+      <span class="card-title">Recent Checks</span>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span class="card-badge">Your Real Data</span>
+        <a href="history.html"
+           style="font-size:12px;color:var(--accent);font-weight:600;">
+          View All →
+        </a>
+      </div>
+    </div>
+    <div id="recent-checks-table">
+      <div class="dash-empty" style="padding:40px;">
+        <div class="dash-empty-icon">📋</div>
+        <p>No recent checks yet.</p>
+        <a href="verify.html">Go Verify →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── ROW 5: Score Distribution ─── -->
+  <div class="card" style="margin-top:16px;">
+    <div class="card-head">
+      <span class="card-title">Score Distribution</span>
+      <span class="card-badge">0–100 Credibility</span>
+    </div>
+    <div class="score-dist-wrap" id="score-dist">
+      <div class="dash-empty" style="padding:30px;">
+        <div class="dash-empty-icon">🎯</div>
+        <p>No score data yet.</p>
+        <a href="verify.html">Verify some news first →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── CLEAR DATA BUTTON ─── -->
+  <div style="text-align:center;margin-top:24px;padding-bottom:20px;">
+    <button class="btn-ghost small" onclick="clearAllData()">
+      🗑️ Clear All My Data
+    </button>
+    <p style="font-size:11px;color:var(--muted);margin-top:8px;">
+      This will clear all your saved history and reset the dashboard.
+    </p>
+  </div>
+
+</main>
+
+<!-- ─── FOOTER ─── -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <a class="logo" href="index.html" style="font-size:15px;">
+        <svg class="logo-icon" style="width:22px;height:22px;" viewBox="0 0 32 32" fill="none"><path d="M16 2L4 7.5V16c0 6.627 5.373 12 12 12s12-5.373 12-12V7.5L16 2Z" stroke="url(#dflg1)" stroke-width="1.5" fill="rgba(99,102,241,0.08)"/><path d="M11 16l3 3 7-7" stroke="url(#dflg2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="dflg1" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient><linearGradient id="dflg2" x1="11" y1="12" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient></defs></svg>
+        TruthCheck
+      </a>
+      <div class="footer-links" style="flex-direction:row;gap:20px;">
+        <a href="verify.html">Verify</a>
+        <a href="trending.html">Trending</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="history.html">History</a>
+        <a href="about.html">About</a>
+      </div>
+      <div style="font-size:12px;color:#3d4a6b;">&copy; 2026 TruthCheck &middot; Powered by Groq AI</div>
+    </div>
+  </div>
+</footer>
+
+<script src="auth.js"></script>
+<script src="app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    requireAuth();
+    renderDashboard();
+  });
+
+  /* ── Clear all data button ── */
+  function clearAllData() {
+    if (confirm('Are you sure? This will delete all your saved checks.')) {
+      localStorage.removeItem('tg_history');
+      renderDashboard();
+      showToast('All data cleared successfully!', 'info');
+    }
+  }
+</script>
+
+</body>
+</html>

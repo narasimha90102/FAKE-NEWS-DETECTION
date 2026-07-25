@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TruthCheck – AI Fact Verification Platform</title>
+  <meta name="description" content="TruthCheck uses advanced AI to detect fake news, misinformation, and unverified claims in seconds. Get instant credibility scores in 25 languages."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<nav class="navbar" id="navbar">
+  <a class="logo" href="index.html">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 2L4 7.5V16c0 6.627 5.373 12 12 12s12-5.373 12-12V7.5L16 2Z" stroke="url(#lg1)" stroke-width="1.5" fill="rgba(99,102,241,0.08)"/>
+      <path d="M11 16l3 3 7-7" stroke="url(#lg2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="22" cy="10" r="1.5" fill="url(#lg2)" opacity="0.6"/>
+      <defs>
+        <linearGradient id="lg1" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#818cf8"/>
+          <stop offset="100%" stop-color="#22d3ee"/>
+        </linearGradient>
+        <linearGradient id="lg2" x1="11" y1="12" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#818cf8"/>
+          <stop offset="100%" stop-color="#22d3ee"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    TruthCheck
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link active">Home</a>
+    <a href="#how-it-works" class="nav-link">How It Works</a>
+  </div>
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <button class="theme-btn" id="theme-toggle-btn" aria-label="Toggle Theme" style="background:transparent;border:none;color:var(--text);display:flex;align-items:center;justify-content:center;padding:8px;border-radius:50%;cursor:pointer;">
+      <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      <svg id="theme-icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+    <div class="nav-auth-buttons" id="nav-auth-container">
+      <a href="login.html" class="nav-link-btn">Log In</a>
+      <button onclick="handleVerifyRedirect(event)" class="nav-cta"><span>Verify Now</span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero-section">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-noise"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Al-Powered Misinformation Detection
+    </div>
+    <h1 class="hero-title">
+      Know The Truth<br/>
+      <span class="gradient-text">Before You Share</span>
+    </h1>
+    <p class="hero-desc">
+      TruthCheck evaluates news headlines, articles, and WhatsApp forwards in seconds using advanced AI. Get precise credibility scores and logical consistency reports.
+    </p>
+    <div class="hero-actions">
+      <button onclick="handleVerifyRedirect(event)" class="btn-primary large">
+        <span>Verify Fact Now</span>
+        <span>→</span>
+      </button>
+      <a href="login.html" class="btn-ghost large" id="hero-login-btn">Log In to Account</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat">
+        <span class="hstat-num">1.2M+</span>
+        <span class="hstat-lbl">Facts Analyzed</span>
+      </div>
+      <div class="hstat-div"></div>
+      <div class="hstat">
+        <span class="hstat-num">94.8%</span>
+        <span class="hstat-lbl">Engine Accuracy</span>
+      </div>
+      <div class="hstat-div"></div>
+      <div class="hstat">
+        <span class="hstat-num">25</span>
+        <span class="hstat-lbl">Global Languages</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-visual-inner">
+      <div class="mockup-card">
+        <div class="mockup-header">
+          <span class="mh-dot" style="background:#f43f5e;"></span>
+          <span class="mh-dot" style="background:#fb923c;"></span>
+          <span class="mh-dot" style="background:#34d399;"></span>
+          <span class="mh-title">TruthCheck AI Engine</span>
+        </div>
+        <div style="padding:24px 26px;background:#090d16;border-radius:0 0 var(--radius-lg) var(--radius-lg);">
+          <!-- Top Title & Subtitle -->
+          <div style="margin-bottom:20px;">
+            <h2 style="font-family:var(--font-head);font-size:20px;font-weight:800;color:#ffffff;margin-bottom:2px;">Analysis Complete</h2>
+            <p style="font-size:13px;color:#808ea3;font-weight:500;">Your Truth Score</p>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <!-- Left Col: Circular Ring Score Chart & Summary Box -->
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;background:rgba(14,21,35,0.6);border:1px solid rgba(255,255,255,0.05);border-radius:16px;">
+                <div style="position:relative;width:140px;height:140px;">
+                  <svg viewBox="0 0 160 160" style="width:100%;height:100%;transform:rotate(-90deg);">
+                    <circle cx="80" cy="80" r="68" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="10" />
+                    <circle cx="80" cy="80" r="68" fill="none" stroke="#00e5a0" stroke-width="10" stroke-linecap="round" stroke-dasharray="427" stroke-dashoffset="76" />
+                  </svg>
+                  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                    <div style="font-family:var(--font-head);font-size:38px;font-weight:800;color:#ffffff;line-height:1;">82</div>
+                    <div style="font-size:12px;font-weight:700;color:#00e5a0;margin-top:4px;">Likely True</div>
+                  </div>
+                </div>
+                <div style="font-size:12.5px;color:#94a3b8;font-weight:600;margin-top:12px;">Confidence: <span style="color:#00e5a0;">High</span></div>
+              </div>
+
+              <div style="background:rgba(14,21,35,0.6);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:18px;">
+                <h3 style="font-family:var(--font-head);font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:10px;">Summary</h3>
+                <p style="font-size:12.5px;color:#94a3b8;line-height:1.55;margin-bottom:10px;">This claim is supported by multiple credible sources and fact-checking databases.</p>
+                <div style="font-size:12px;font-weight:600;color:#00e5a0;">No significant red flags detected.</div>
+              </div>
+            </div>
+
+            <!-- Right Col: AI Agent Analysis & Details Box -->
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div style="background:rgba(14,21,35,0.6);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:18px;">
+                <h3 style="font-family:var(--font-head);font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:12px;">AI Agent Analysis</h3>
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                  <div>
+                    <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:5px;">
+                      <span style="color:#cbd5e1;font-weight:500;">Source Reliability</span>
+                      <span style="color:#94a3b8;font-weight:600;">85/100</span>
+                    </div>
+                    <div style="height:6px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;">
+                      <div style="height:100%;width:85%;background:#00e5a0;border-radius:3px;"></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:5px;">
+                      <span style="color:#cbd5e1;font-weight:500;">Content Analysis</span>
+                      <span style="color:#94a3b8;font-weight:600;">78/100</span>
+                    </div>
+                    <div style="height:6px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;">
+                      <div style="height:100%;width:78%;background:#00e5a0;border-radius:3px;"></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:5px;">
+                      <span style="color:#cbd5e1;font-weight:500;">Fact Verification</span>
+                      <span style="color:#94a3b8;font-weight:600;">90/100</span>
+                    </div>
+                    <div style="height:6px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;">
+                      <div style="height:100%;width:90%;background:#00e5a0;border-radius:3px;"></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:5px;">
+                      <span style="color:#cbd5e1;font-weight:500;">Cross Reference</span>
+                      <span style="color:#94a3b8;font-weight:600;">75/100</span>
+                    </div>
+                    <div style="height:6px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;">
+                      <div style="height:100%;width:75%;background:#00e5a0;border-radius:3px;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="background:rgba(14,21,35,0.6);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:18px;">
+                <h3 style="font-family:var(--font-head);font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:10px;">Details</h3>
+                <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#94a3b8;">
+                  <div style="display:flex;justify-content:space-between;"><span>Checked:</span> <strong style="color:#f1f5f9;">2 min ago</strong></div>
+                  <div style="display:flex;justify-content:space-between;"><span>Sources Analyzed:</span> <strong style="color:#f1f5f9;">12</strong></div>
+                  <div style="display:flex;justify-content:space-between;"><span>AI Agents:</span> <strong style="color:#f1f5f9;">4</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA SECTION ─── -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div style="max-width:600px;margin:0 auto;position:relative;z-index:1;">
+    <div class="section-label" style="justify-content:center;display:inline-flex;margin-bottom:16px;">Get Started Free</div>
+    <h2 class="cta-section h2" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-2px;margin-bottom:14px;">
+      Ready to Verify the Truth?
+    </h2>
+    <p style="font-size:16px;color:#7c8db5;margin-bottom:32px;line-height:1.7;">
+      Join thousands of fact-checkers, journalists, and curious minds who trust TruthCheck to stop misinformation at the source.
+    </p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="handleVerifyRedirect(event)" class="btn-primary large">Start Verifying Free →</button>
+      <a href="about.html" class="btn-ghost large">Learn How It Works</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand-col">
+        <a class="logo" href="index.html" style="margin-bottom:14px;display:inline-flex;">
+          <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 2L4 7.5V16c0 6.627 5.373 12 12 12s12-5.373 12-12V7.5L16 2Z" stroke="url(#flg1)" stroke-width="1.5" fill="rgba(99,102,241,0.08)"/>
+            <path d="M11 16l3 3 7-7" stroke="url(#flg2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="flg1" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+              <linearGradient id="flg2" x1="11" y1="12" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+            </defs>
+          </svg>
+          TruthCheck
+        </a>
+        <p class="footer-tagline">The AI-powered misinformation detection platform built to protect truth at scale — across 25 languages.</p>
+        <div class="footer-social">
+          <a href="#" class="footer-social-btn" title="Twitter">𝕏</a>
+          <a href="#" class="footer-social-btn" title="GitHub">⌥</a>
+          <a href="#" class="footer-social-btn" title="LinkedIn">in</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Product</h4>
+        <div class="footer-links">
+          <a href="verify.html">Verify Content</a>
+          <a href="trending.html">Trending Checks</a>
+          <a href="dashboard.html">Analytics Dashboard</a>
+          <a href="history.html">Verification History</a>
+          <a href="languages.html">Languages</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <div class="footer-links">
+          <a href="about.html">About TruthCheck</a>
+          <a href="about.html#faq">FAQ</a>
+          <a href="login.html">Log In</a>
+          <a href="register.html">Create Account</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Stay Updated</h4>
+        <p style="font-size:13px;color:#7c8db5;margin-bottom:14px;line-height:1.65;">Get notified of new features and AI updates.</p>
+        <div class="footer-newsletter-form">
+          <input class="footer-newsletter-input" type="email" placeholder="your@email.com"/>
+          <button class="footer-newsletter-btn">Subscribe</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2026 TruthCheck · Built by SAMA VAISHNAVI · Powered by Groq AI</div>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="auth.js"></script>
+<script>
+  function handleVerifyRedirect(e) {
+    if (e) e.preventDefault();
+    const user = getCurrentUser();
+    if (user) {
+      window.location.href = 'verify.html';
+    } else {
+      window.location.href = 'login.html?redirect=verify.html';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof renderNavbar === 'function') {
+      renderNavbar();
+    }
+    
+    if (typeof getCurrentUser === 'function') {
+      const user = getCurrentUser();
+      if (user) {
+        const hLogin = document.getElementById('hero-login-btn');
+        if (hLogin) hLogin.style.display = 'none';
+      }
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Log In – TruthCheck</title>
+  <meta name="description" content="Log in to your TruthCheck account to access your verification tools and history."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="logo" href="index.html">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 2L4 7.5V16c0 6.627 5.373 12 12 12s12-5.373 12-12V7.5L16 2Z" stroke="url(#llg1)" stroke-width="1.5" fill="rgba(99,102,241,0.08)"/>
+      <path d="M11 16l3 3 7-7" stroke="url(#llg2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs>
+        <linearGradient id="llg1" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+        <linearGradient id="llg2" x1="11" y1="12" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+      </defs>
+    </svg>
+    TruthCheck
+  </a>
+  <div class="nav-links" id="nav-links-container"></div>
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <button class="theme-btn" id="theme-toggle-btn" aria-label="Toggle Theme" style="background:transparent;border:none;color:var(--text);display:flex;align-items:center;justify-content:center;padding:8px;border-radius:50%;cursor:pointer;">
+      <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      <svg id="theme-icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+    <div class="nav-auth-buttons" id="nav-auth-container">
+      <a href="login.html" class="nav-link-btn">Log In</a>
+      <a href="register.html" class="nav-cta"><span>Sign Up</span></a>
+    </div>
+  </div>
+</nav>
+
+<main class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-card-header">
+      <div class="auth-logo-badge">
+        <svg width="14" height="14" viewBox="0 0 32 32" fill="none"><path d="M16 2L4 7.5V16c0 6.627 5.373 12 12 12s12-5.373 12-12V7.5L16 2Z" stroke="#818cf8" stroke-width="2" fill="rgba(99,102,241,0.1)"/><path d="M11 16l3 3 7-7" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Welcome Back
+      </div>
+      <h1 class="auth-title">Log In to TruthCheck</h1>
+      <p class="auth-subtitle">Access your verification tools and saved history.</p>
+    </div>
+
+    <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label class="form-label" for="login-input">Username or Email Address</label>
+        <div class="form-input-wrap">
+          <input
+            type="text"
+            id="login-input"
+            class="form-input"
+            placeholder="Enter your username or email"
+            required
+            autocomplete="username"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="login-password">Password</label>
+        <div class="form-input-wrap">
+          <input
+            type="password"
+            id="login-password"
+            class="form-input"
+            placeholder="Enter your password"
+            required
+            autocomplete="current-password"
+          />
+          <button
+            type="button"
+            class="toggle-pwd-btn"
+            onclick="togglePasswordVisibility('login-password', this)"
+          >
+            👁️
+          </button>
+        </div>
+      </div>
+
+      <div class="auth-row-between">
+        <label class="custom-checkbox">
+          <input type="checkbox" id="remember-me">
+          <span class="checkmark">✓</span>
+          <span>Remember Me</span>
+        </label>
+        <a href="forgot-password.html" class="auth-link">Forgot Password?</a>
+      </div>
+
+      <button type="submit" id="login-submit-btn" class="btn-auth-submit">
+        <span>Log In</span>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="register.html" class="auth-link">Create Account</a>
+    </div>
+  </div>
+</main>
+
+<script src="auth.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    /* Check if already logged in */
+    const user = getCurrentUser();
+    if (user) {
+      showToast(`Already logged in as ${user.username}`, 'info');
+      setTimeout(() => { window.location.href = 'verify.html'; }, 800);
+      return;
+    }
+
+    /* Check registration success redirect parameter */
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('registered') === '1') {
+      showToast('Account created successfully. Please log in.', 'success');
+    }
+  });
+
+  function togglePasswordVisibility(id, btn) {
+    const input = document.getElementById(id);
+    if (!input) return;
+    if (input.type === "password") {
+      input.type = "text";
+      btn.textContent = "🙈";
+    } else {
+      input.type = "password";
+      btn.textContent = "👁️";
+    }
+  }
+
+  function handleLogin(e) {
+    e.preventDefault();
+    const loginInput = document.getElementById('login-input').value.trim();
+    const pwdVal = document.getElementById('login-password').value;
+    const rememberMe = document.getElementById('remember-me').checked;
+    const btn = document.getElementById('login-submit-btn');
+
+    btn.disabled = true;
+
+    const res = loginUser(loginInput, pwdVal, rememberMe);
+    if (!res.success) {
+      showToast(res.message, 'error');
+      btn.disabled = false;
+      return;
+    }
+
+    showToast('Login successful! Redirecting...', 'success');
+
+    const params = new URLSearchParams(window.location.search);
+    const redirectUrl = params.get('redirect') ? decodeURIComponent(params.get('redirect')) : 'dashboard.html';
+
+    setTimeout(() => {
+      window.location.href = redirectUrl;
+    }, 600);
+  }
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof requireGuest === 'function') requireGuest();
+  });
+</script>
+</body>
+</html>

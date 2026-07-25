@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Profile – TruthCheck</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="logo" href="index.html"><span class="logo-dot"></span>TruthCheck</a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="verify.html" class="nav-link">Verify</a>
+    <a href="trending.html" class="nav-link">Trending</a>
+    <a href="about.html" class="nav-link">About</a>
+  </div>
+</nav>
+
+<main class="page-container" style="max-width:1000px; margin: 40px auto; padding:0 24px;">
+  <div class="dash-header">
+    <div>
+      <h1 class="dash-title">User Profile</h1>
+      <p class="dash-subtitle">Manage your account information, preferences, and security settings.</p>
+    </div>
+  </div>
+
+  <div class="profile-grid">
+    <!-- Sidebar -->
+    <div class="profile-card-sidebar">
+      <div class="avatar-picker-wrap">
+        <div class="big-avatar" id="prof-big-avatar">🛡️</div>
+        <button class="avatar-edit-badge" onclick="toggleAvatarModal()" title="Change Avatar">✏️</button>
+      </div>
+
+      <h2 class="profile-name" id="prof-username">Loading...</h2>
+      <div class="profile-email" id="prof-email">user@domain.com</div>
+
+      <div id="prof-ver-badge" class="verification-badge unverified" onclick="triggerEmailVerification()">
+        <span id="prof-ver-icon">⚠️</span>
+        <span id="prof-ver-text">Unverified Email</span>
+      </div>
+
+      <div style="width:100%; margin-top:24px; border-top:1px solid var(--border); padding-top:16px;">
+        <div style="font-size:12px; color:var(--muted2); text-align:left; margin-bottom:8px;">Member Details:</div>
+        <div style="font-size:13px; color:var(--text); text-align:left; display:flex; justify-content:space-between; margin-bottom:6px;">
+          <span style="color:var(--muted);">Joined:</span>
+          <span id="prof-joined-date">Today</span>
+        </div>
+        <div style="font-size:13px; color:var(--text); text-align:left; display:flex; justify-content:space-between;">
+          <span style="color:var(--muted);">Searches:</span>
+          <span id="prof-searches-count">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div style="display:flex; flex-direction:column; gap:20px;">
+      <!-- Edit Profile -->
+      <div class="dash-card" style="padding:24px;">
+        <h3 style="font-family:'Syne',sans-serif; font-size:18px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+          <span>👤 Account Details</span>
+        </h3>
+        
+        <form onsubmit="handleUpdateProfile(event)" class="auth-form">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div class="form-group">
+              <label class="form-label" for="edit-username">Username</label>
+              <input type="text" id="edit-username" class="form-input" required/>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="edit-email">Email Address</label>
+              <input type="email" id="edit-email" class="form-input" required/>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary" style="align-self:flex-start; margin-top:12px;">Save Profile Changes</button>
+        </form>
+      </div>
+
+      <!-- Quick Navigation -->
+      <div class="dash-card" style="padding:24px;">
+        <h3 style="font-family:'Syne',sans-serif; font-size:18px; font-weight:700; margin-bottom:16px;">⚙️ Quick Actions</h3>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a href="settings.html" class="btn-ghost">Account Settings & Security</a>
+          <a href="history.html" class="btn-ghost">View Verification History</a>
+          <a href="dashboard.html" class="btn-ghost">Analytics Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Avatar Modal -->
+  <div id="avatar-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); z-index:1000; align-items:center; justify-content:center;">
+    <div class="auth-card" style="max-width:360px;">
+      <h3 style="font-family:'Syne',sans-serif; font-size:18px; margin-bottom:12px;">Choose Profile Avatar</h3>
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin:16px 0;">
+        <button type="button" class="btn-ghost" style="font-size:32px; padding:12px;" onclick="selectAvatar('🛡️')">🛡️</button>
+        <button type="button" class="btn-ghost" style="font-size:32px; padding:12px;" onclick="selectAvatar('🔍')">🔍</button>
+        <button type="button" class="btn-ghost" style="font-size:32px; padding:12px;" onclick="selectAvatar('⚖️')">⚖️</button>
+        <button type="button" class="btn-ghost" style="font-size:32px; padding:12px;" onclick="selectAvatar('🤖')">🤖</button>
+        <button type="button" class="btn-ghost" style="font-size:32px; padding:12px;" onclick="selectAvatar('🕵️')">🕵️</button>
+        <button type="button" class="btn-ghost" style="font-size:32px; padding:12px;" onclick="selectAvatar('⚡')">⚡</button>
+      </div>
+      <button class="btn-ghost small" style="width:100%;" onclick="toggleAvatarModal()">Cancel</button>
+    </div>
+  </div>
+</main>
+
+<script src="auth.js"></script>
+<script>
+  let currentUser = null;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    currentUser = requireAuth();
+    if (!currentUser) return;
+
+    loadProfileData();
+  });
+
+  function loadProfileData() {
+    if (!currentUser) return;
+
+    document.getElementById('prof-big-avatar').textContent = currentUser.avatar || '🛡️';
+    document.getElementById('prof-username').textContent = currentUser.username;
+    document.getElementById('prof-email').textContent = currentUser.email;
+
+    document.getElementById('edit-username').value = currentUser.username;
+    document.getElementById('edit-email').value = currentUser.email;
+
+    const history = JSON.parse(localStorage.getItem('tg_history') || '[]');
+    document.getElementById('prof-searches-count').textContent = history.length;
+
+    const joinedDate = new Date(currentUser.created).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    document.getElementById('prof-joined-date').textContent = joinedDate;
+
+    /* Verification status badge */
+    const badge = document.getElementById('prof-ver-badge');
+    const icon = document.getElementById('prof-ver-icon');
+    const text = document.getElementById('prof-ver-text');
+
+    if (currentUser.verified) {
+      badge.className = 'verification-badge verified';
+      icon.textContent = '✓';
+      text.textContent = 'Verified Account';
+    } else {
+      badge.className = 'verification-badge unverified';
+      icon.textContent = '⚠️';
+      text.textContent = 'Unverified (Click to Verify)';
+    }
+  }
+
+  function handleUpdateProfile(e) {
+    e.preventDefault();
+    const newUsername = document.getElementById('edit-username').value;
+    const newEmail = document.getElementById('edit-email').value;
+
+    const res = updateUserProfile({ username: newUsername, email: newEmail });
+    if (!res.success) {
+      showToast(res.message, 'error');
+      return;
+    }
+
+    currentUser = res.user;
+    loadProfileData();
+    renderNavbarUser();
+    showToast(res.message, 'success');
+  }
+
+  function triggerEmailVerification() {
+    if (currentUser.verified) return;
+    showToast('Sending email verification code...', 'info');
+    setTimeout(() => {
+      const res = verifyUserEmail();
+      if (res.success) {
+        currentUser.verified = true;
+        loadProfileData();
+        showToast('Email verified successfully! ✓', 'success');
+      }
+    }, 1200);
+  }
+
+  function toggleAvatarModal() {
+    const modal = document.getElementById('avatar-modal');
+    modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+  }
+
+  function selectAvatar(emoji) {
+    const res = updateUserProfile({ avatar: emoji });
+    if (res.success) {
+      currentUser = res.user;
+      loadProfileData();
+      renderNavbarUser();
+      toggleAvatarModal();
+      showToast('Avatar updated!', 'success');
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Language Support – TruthCheck</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="logo" href="index.html"><span class="logo-dot"></span>TruthCheck</a>
+  <div class="nav-links">
+    <a href="index.html"     class="nav-link">Home</a>
+    <a href="verify.html"    class="nav-link">Verify</a>
+    <a href="trending.html"  class="nav-link">Trending</a>
+    <a href="about.html"     class="nav-link">About</a>
+  </div>
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <button class="theme-btn" id="theme-toggle-btn" aria-label="Toggle Theme" style="background:transparent;border:none;color:var(--text);display:flex;align-items:center;justify-content:center;padding:8px;border-radius:50%;cursor:pointer;">
+      <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      <svg id="theme-icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+    <a href="verify.html" class="nav-cta"><span>Try Free</span></a>
+  </div>
+</nav>
+
+<main class="page-main">
+  <div class="page-header-block">
+    <div class="page-eyebrow">Accessibility · 25 Languages</div>
+    <h1 class="page-h1">25 Global & Regional Languages Supported</h1>
+    <p class="page-sub">TruthCheck is built to fight misinformation globally. Verify news in your native language with AI precision.</p>
+  </div>
+
+  <!-- 25 Languages Grid Container -->
+  <div id="all-languages-grid" class="lang-grid-25"></div>
+
+  <section class="section">
+    <h2 class="section-title" style="font-size:20px;margin-bottom:20px;">Why language support matters</h2>
+    <div class="lang-why-grid">
+      <div class="lw-card">
+        <div class="lw-icon">📱</div>
+        <h4>WhatsApp Misinformation</h4>
+        <p>Over 90% of fake news in India spreads via WhatsApp in regional languages. English-only tools miss the majority of misinformation.</p>
+      </div>
+      <div class="lw-card">
+        <div class="lw-icon">🧠</div>
+        <h4>Native Language Understanding</h4>
+        <p>Our AI detects language-specific emotional manipulation, slang-based deception, and culturally-targeted fake news patterns.</p>
+      </div>
+      <div class="lw-card">
+        <div class="lw-icon">🎯</div>
+        <h4>No Translation Required</h4>
+        <p>Analyze content as-is without losing nuance or introducing translation errors that reduce detection accuracy.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="lang-cta-row">
+    <p>Try verifying a news article in your language right now.</p>
+    <a href="verify.html" class="btn-primary">Go to Verify →</a>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="logo"><span class="logo-dot"></span>TruthCheck</span>
+      <span class="footer-tagline">Verify before you share.</span>
+    </div>
+    <div class="footer-links">
+      <a href="verify.html">Verify</a>
+      <a href="trending.html">Trending</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="history.html">History</a>
+      <a href="about.html">About</a>
+    </div>
+    <div class="footer-copy">&copy; 2025 TruthCheck · Powered by Claude AI</div>
+  </div>
+</footer>
+
+<script src="auth.js"></script>
+<script src="app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const grid = document.getElementById('all-languages-grid');
+    if (grid && typeof ALL_LANGUAGES !== 'undefined') {
+      grid.innerHTML = ALL_LANGUAGES.map(l => `
+        <div class="lang-card-25">
+          <div class="lang-flag">${l.flag}</div>
+          <div>
+            <div class="lang-info-title">${l.name}</div>
+            <div class="lang-info-sub">Code: ${l.code.toUpperCase()} · AI Verified</div>
+          </div>
+        </div>
+      `).join('');
+    }
+  });
+</script>
+</body>
+</html>

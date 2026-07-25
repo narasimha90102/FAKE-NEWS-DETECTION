@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About – TruthCheck</title>
+  <meta name="description" content="Learn about TruthCheck, the AI-powered misinformation detection platform."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="logo" href="index.html">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 2L4 7.5V16c0 6.627 5.373 12 12 12s12-5.373 12-12V7.5L16 2Z" stroke="url(#alg1)" stroke-width="1.5" fill="rgba(99,102,241,0.08)"/>
+      <path d="M11 16l3 3 7-7" stroke="url(#alg2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs>
+        <linearGradient id="alg1" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+        <linearGradient id="alg2" x1="11" y1="12" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+      </defs>
+    </svg>
+    TruthCheck
+  </a>
+  <div class="nav-links">
+    <a href="index.html"     class="nav-link">Home</a>
+    <a href="verify.html"    class="nav-link">Verify</a>
+    <a href="trending.html"  class="nav-link">Trending</a>
+    <a href="about.html"     class="nav-link active">About</a>
+  </div>
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <button class="theme-btn" id="theme-toggle-btn" aria-label="Toggle Theme" style="background:transparent;border:none;color:var(--text);display:flex;align-items:center;justify-content:center;padding:8px;border-radius:50%;cursor:pointer;">
+      <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      <svg id="theme-icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+    <a href="verify.html" class="nav-cta"><span>Try Free</span></a>
+  </div>
+</nav>
+
+<main class="page-main">
+  <div class="page-header-block">
+    <div class="page-eyebrow">Our Mission</div>
+    <h1 class="page-h1">About TruthCheck</h1>
+    <p class="page-sub">Built to fight the fastest-growing threat to democracy — misinformation at scale.</p>
+  </div>
+
+  <!-- Mission -->
+  <section class="section">
+    <div class="about-mission-card">
+      <div class="amc-quote">"</div>
+      <p>Fake news spreads 6× faster than real news on social media. In India, where over 500 million people access information primarily through regional languages and WhatsApp, existing English-only tools leave hundreds of millions unprotected. TruthCheck was built to change that.</p>
+    </div>
+  </section>
+
+  <!-- Comparison table -->
+  <section class="section">
+    <div class="section-label">Competitive Landscape</div>
+    <h2 class="section-title">How we compare</h2>
+    <div class="compare-table-wrap">
+      <table class="compare-tbl">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th class="our-col">TruthCheck</th>
+            <th>Verifi</th>
+            <th>OIGETIT</th>
+            <th>FakeOut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Real-Time AI Analysis</td><td class="our-col"><span class="chk">✓</span></td><td><span class="half">~</span></td><td><span class="half">~</span></td><td><span class="half">~</span></td></tr>
+          <tr><td>Credibility Score 0–100</td><td class="our-col"><span class="chk">✓</span></td><td><span class="half">~</span></td><td><span class="chk">✓</span></td><td><span class="half">~</span></td></tr>
+          <tr><td>Regional Language Support</td><td class="our-col"><span class="chk">✓ 25 langs</span></td><td><span class="xmk">✗</span></td><td><span class="xmk">✗</span></td><td><span class="xmk">✗</span></td></tr>
+          <tr><td>WhatsApp Message Check</td><td class="our-col"><span class="chk">✓</span></td><td><span class="xmk">✗</span></td><td><span class="xmk">✗</span></td><td><span class="xmk">✗</span></td></tr>
+          <tr><td>Trending Fake News Feed</td><td class="our-col"><span class="chk">✓</span></td><td><span class="xmk">✗</span></td><td><span class="chk">✓</span></td><td><span class="xmk">✗</span></td></tr>
+          <tr><td>Analytics Dashboard</td><td class="our-col"><span class="chk">✓</span></td><td><span class="xmk">✗</span></td><td><span class="xmk">✗</span></td><td><span class="xmk">✗</span></td></tr>
+          <tr><td>Signal-Level Breakdown</td><td class="our-col"><span class="chk">✓</span></td><td><span class="xmk">✗</span></td><td><span class="xmk">✗</span></td><td><span class="half">~</span></td></tr>
+          <tr><td>Free to Use</td><td class="our-col"><span class="chk">✓</span></td><td><span class="half">~</span></td><td><span class="half">~</span></td><td><span class="chk">✓</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Team / Tech -->
+  <section class="section alt-section">
+    <div class="section-label">Technology</div>
+    <h2 class="section-title">Powered by the best AI</h2>
+    <div class="tech-cards">
+      <div class="tech-card">
+        <div class="tc-icon">🤖</div>
+        <h4>Claude AI by Anthropic</h4>
+        <p>TruthCheck uses Claude, one of the world's most accurate language models, to analyze news content for credibility signals.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tc-icon">🔬</div>
+        <h4>Multi-Signal Analysis</h4>
+        <p>We evaluate emotional language, source credibility, factual consistency, grammatical quality, and claim verifiability simultaneously.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tc-icon">🌍</div>
+        <h4>Multilingual NLP</h4>
+        <p>Native-language processing for Tamil, Hindi, Telugu, Bengali, and English without translation accuracy loss.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Frequently asked questions</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>Is TruthCheck free to use?</span><span class="faq-arrow">▾</span>
+        </div>
+        <div class="faq-a">Yes, TruthCheck is completely free to use. Simply visit the Verify page, paste your content, and get an instant credibility score.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>How accurate is TruthCheck?</span><span class="faq-arrow">▾</span>
+        </div>
+        <div class="faq-a">TruthCheck achieves 94.2% overall accuracy. English content reaches 97%, while regional languages range from 91–95% accuracy depending on the language.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>Can I check WhatsApp forwards?</span><span class="faq-arrow">▾</span>
+        </div>
+        <div class="faq-a">Yes. Simply copy the forwarded message text and paste it into the WhatsApp tab on the Verify page. TruthCheck will analyze it instantly.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>Which languages are supported?</span><span class="faq-arrow">▾</span>
+        </div>
+        <div class="faq-a">TruthCheck supports English, Tamil, Hindi, Telugu, and Bengali. More languages are coming soon.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span>Is my data stored or shared?</span><span class="faq-arrow">▾</span>
+        </div>
+        <div class="faq-a">No. Your submitted content is sent only to the AI analysis engine and is not stored, logged, or shared with third parties.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <a class="logo" href="index.html" style="font-size:15px;">
+        <svg class="logo-icon" style="width:22px;height:22px;" viewBox="0 0 32 32" fill="none"><path d="M16 2L4 7.5V16c0 6.627 5.373 12 12 12s12-5.373 12-12V7.5L16 2Z" stroke="url(#aflg1)" stroke-width="1.5" fill="rgba(99,102,241,0.08)"/><path d="M11 16l3 3 7-7" stroke="url(#aflg2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="aflg1" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient><linearGradient id="aflg2" x1="11" y1="12" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient></defs></svg>
+        TruthCheck
+      </a>
+      <div class="footer-links" style="flex-direction:row;gap:20px;">
+        <a href="verify.html">Verify</a>
+        <a href="trending.html">Trending</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="history.html">History</a>
+        <a href="languages.html">Languages</a>
+        <a href="about.html">About</a>
+      </div>
+      <div style="font-size:12px;color:#3d4a6b;">&copy; 2026 TruthCheck &middot; Powered by Groq AI</div>
+    </div>
+  </div>
+</footer>
+
+<script src="auth.js"></script>
+<script src="app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof requireAuth === 'function') requireAuth();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verify News – TruthCheck</title>
+  <meta name="description" content="Verify news headlines, articles, URLs and WhatsApp forwards with AI. Get instant credibility scores."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="logo" href="index.html">
+    <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 2L4 7.5V16c0 6.627 5.373 12 12 12s12-5.373 12-12V7.5L16 2Z" stroke="url(#vlg1)" stroke-width="1.5" fill="rgba(99,102,241,0.08)"/>
+      <path d="M11 16l3 3 7-7" stroke="url(#vlg2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs>
+        <linearGradient id="vlg1" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+        <linearGradient id="vlg2" x1="11" y1="12" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+      </defs>
+    </svg>
+    TruthCheck
+  </a>
+  <div class="nav-links">
+    <a href="index.html"     class="nav-link">Home</a>
+    <a href="verify.html"    class="nav-link active">Verify</a>
+    <a href="trending.html"  class="nav-link">Trending</a>
+    <a href="about.html"     class="nav-link">About</a>
+  </div>
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <button class="theme-btn" id="theme-toggle-btn" aria-label="Toggle Theme" style="background:transparent;border:none;color:var(--text);display:flex;align-items:center;justify-content:center;padding:8px;border-radius:50%;cursor:pointer;">
+      <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      <svg id="theme-icon-moon" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+    <a href="verify.html" class="nav-cta"><span>Try Free</span></a>
+  </div>
+</nav>
+
+<main class="page-main">
+  <!-- News Verification Engine Header -->
+  <div class="verify-engine-header">
+    <h1 class="verify-engine-title">News Verification Engine</h1>
+    <p class="verify-engine-sub">
+      Enter news text, an article link, or upload an image to instantly check credibility<br/>against trusted global news sources.
+    </p>
+  </div>
+
+  <div class="verify-engine-container">
+    <div class="verify-input-card">
+
+      <!-- Top Tabs -->
+      <div class="engine-tabs">
+        <button class="engine-tab active" id="itab-text" onclick="switchInputTab('text')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <span>Text Article</span>
+        </button>
+
+        <button class="engine-tab" id="itab-url" onclick="switchInputTab('url')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+          <span>Article URL</span>
+        </button>
+      </div>
+
+      <!-- Label Row with Sample Buttons -->
+      <div class="engine-label-row">
+        <label class="engine-input-label" for="verify-input">News Article Text / Headline:</label>
+        <div class="engine-sample-btns">
+          <button type="button" class="btn-sample genuine" onclick="fillExample(2)">+ Genuine Sample</button>
+          <button type="button" class="btn-sample fake" onclick="fillExample(1)">+ Fake Sample</button>
+        </div>
+      </div>
+
+      <!-- Main Textarea Input -->
+      <div class="engine-textarea-wrap">
+        <textarea id="verify-input" class="engine-textarea" rows="6"
+          placeholder="Paste news text, headlines, or claims to verify..."></textarea>
+      </div>
+
+      <!-- Bottom Controls Row: Language Select & Purple Analyze Button -->
+      <div class="engine-bottom-controls">
+        <div class="engine-lang-wrap">
+          <label class="engine-lang-label" for="lang-select">Language:</label>
+          <select id="lang-select" class="engine-lang-select">
+            <option value="en">🇬🇧 English</option>
+            <option value="hi">🇮🇳 Hindi (हिन्दी)</option>
+            <option value="te">🇮🇳 Telugu (తెలుగు)</option>
+            <option value="ta">🇮🇳 Tamil (தமிழ்)</option>
+            <option value="bn">🇧🇩 Bengali (বাংলা)</option>
+            <option value="kn">🇮🇳 Kannada (கன்னடம் / ಕನ್ನಡ)</option>
+            <option value="ml">🇮🇳 Malayalam (മലയാളം)</option>
+            <option value="mr">🇮🇳 Marathi (मराठी)</option>
+            <option value="gu">🇮🇳 Gujarati (ગુજરાતી)</option>
+            <option value="pa">🇮🇳 Punjabi (ਪੰਜਾਬੀ)</option>
+            <option value="ur">🇵🇰 Urdu (اردو)</option>
+            <option value="or">🇮🇳 Odia (ଓଡ଼ିଆ)</option>
+            <option value="as">🇮🇳 Assamese (অসমীয়া)</option>
+            <option value="fr">🇫🇷 French (Français)</option>
+            <option value="es">🇪🇸 Spanish (Español)</option>
+            <option value="de">🇩🇪 German (Deutsch)</option>
+            <option value="it">🇮🇹 Italian (Italiano)</option>
+            <option value="pt">🇵🇹 Portuguese (Português)</option>
+            <option value="ru">🇷🇺 Russian (Русский)</option>
+            <option value="ar">🇸🇦 Arabic (العربية)</option>
+            <option value="ja">🇯🇵 Japanese (日本語)</option>
+            <option value="ko">🇰🇷 Korean (한국어)</option>
+            <option value="zh">🇨🇳 Chinese (Simplified) (中文)</option>
+            <option value="tr">🇹🇷 Turkish (Türkçe)</option>
+            <option value="nl">🇳🇱 Dutch (Nederlands)</option>
+          </select>
+        </div>
+
+        <button class="btn-engine-analyze" id="analyze-btn" onclick="analyzeContent()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <span id="btn-label">Analyze</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="verify-layout" style="margin-top: 24px;">
+    <!-- Single full-width or split result container below -->
+    <div class="verify-result-col" style="width:100%; max-width:960px; margin:0 auto;">
+
+      <div class="loading-card" id="loading-card">
+        <div class="lc-inner">
+          <div class="lc-spinner"></div>
+          <p class="lc-text">Analyzing with AI...</p>
+          <p class="lc-sub">Checking source patterns, language signals, and factual consistency</p>
+        </div>
+      </div>
+
+      <div class="result-card" id="result-card">
+        <!-- Top Title & Subtitle -->
+        <div class="rc-header-title">
+          <h2>Analysis Complete</h2>
+          <p>Your Truth Score</p>
+        </div>
+
+        <div class="rc-main-grid">
+          <!-- Left Col: Circular Ring Score Chart & Summary Box -->
+          <div class="rc-left-col">
+            <div class="rc-ring-box">
+              <div class="rc-ring-chart">
+                <svg viewBox="0 0 160 160">
+                  <circle cx="80" cy="80" r="68" class="rc-ring-bg" />
+                  <circle id="score-ring-circle" cx="80" cy="80" r="68" class="rc-ring-fill" />
+                </svg>
+                <div class="rc-ring-content">
+                  <div class="rc-ring-score-val" id="score-ring-num">82</div>
+                  <div class="rc-ring-verdict-lbl" id="rcv-verdict">Likely True</div>
+                </div>
+              </div>
+              <div class="rc-confidence-lbl" id="rc-confidence">Confidence: High</div>
+            </div>
+
+            <div class="rc-card-box rc-summary-box">
+              <h3>Summary</h3>
+              <p id="rc-summary">This claim is supported by multiple credible sources and fact-checking databases.</p>
+              <div class="rc-highlight-msg" id="rc-highlight">No significant red flags detected.</div>
+            </div>
+          </div>
+
+          <!-- Right Col: AI Agent Analysis & Details Box -->
+          <div class="rc-right-col">
+            <div class="rc-card-box rc-agent-box">
+              <h3>AI Agent Analysis</h3>
+              <div class="rc-agent-metrics">
+                <div class="rc-metric-row">
+                  <div class="rc-metric-head">
+                    <span class="rc-metric-name">Source Reliability</span>
+                    <span class="rc-metric-val" id="m-source">85/100</span>
+                  </div>
+                  <div class="rc-metric-bar"><div class="rc-mb-fill" id="mb-source" style="width: 85%;"></div></div>
+                </div>
+
+                <div class="rc-metric-row">
+                  <div class="rc-metric-head">
+                    <span class="rc-metric-name">Content Analysis</span>
+                    <span class="rc-metric-val" id="m-content">78/100</span>
+                  </div>
+                  <div class="rc-metric-bar"><div class="rc-mb-fill" id="mb-content" style="width: 78%;"></div></div>
+                </div>
+
+                <div class="rc-metric-row">
+                  <div class="rc-metric-head">
+                    <span class="rc-metric-name">Fact Verification</span>
+                    <span class="rc-metric-val" id="m-fact">90/100</span>
+                  </div>
+                  <div class="rc-metric-bar"><div class="rc-mb-fill" id="mb-fact" style="width: 90%;"></div></div>
+                </div>
+
+                <div class="rc-metric-row">
+                  <div class="rc-metric-head">
+                    <span class="rc-metric-name">Cross Reference</span>
+                    <span class="rc-metric-val" id="m-cross">75/100</span>
+                  </div>
+                  <div class="rc-metric-bar"><div class="rc-mb-fill" id="mb-cross" style="width: 75%;"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rc-card-box rc-details-box">
+              <h3>Details</h3>
+              <div class="rc-detail-lines">
+                <div><span>Checked:</span> <strong id="det-time">Just now</strong></div>
+                <div><span>Sources Analyzed:</span> <strong id="det-sources">12</strong></div>
+                <div><span>AI Agents:</span> <strong>4</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rc-footer">
+          <button class="rc-action" onclick="clearResult()">Clear</button>
+          <button class="rc-action primary" onclick="saveToHistory()">Save to History</button>
+        </div>
+      </div>
+
+      <div class="placeholder-card" id="placeholder-card">
+        <div class="ph-icon">🔍</div>
+        <p>Paste content on the left and click <strong>Analyze Now</strong> to get your credibility report.</p>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-top:0;border-top:none;">
+      <a class="logo" href="index.html" style="font-size:15px;">
+        <svg class="logo-icon" style="width:22px;height:22px;" viewBox="0 0 32 32" fill="none"><path d="M16 2L4 7.5V16c0 6.627 5.373 12 12 12s12-5.373 12-12V7.5L16 2Z" stroke="url(#vflg1)" stroke-width="1.5" fill="rgba(99,102,241,0.08)"/><path d="M11 16l3 3 7-7" stroke="url(#vflg2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="vflg1" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient><linearGradient id="vflg2" x1="11" y1="12" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient></defs></svg>
+        TruthCheck
+      </a>
+      <div class="footer-links" style="flex-direction:row;gap:20px;">
+        <a href="verify.html">Verify</a>
+        <a href="trending.html">Trending</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="history.html">History</a>
+        <a href="about.html">About</a>
+      </div>
+      <div style="font-size:12px;color:#3d4a6b;">&copy; 2026 TruthCheck &middot; Powered by Groq AI</div>
+    </div>
+  </div>
+</footer>
+
+<script src="auth.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    requireAuth();
+  });
+</script>
+<script src="app.js"></script>
+</body>
+</html>
