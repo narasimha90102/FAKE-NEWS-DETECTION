@@ -450,7 +450,6 @@ function renderNavbarUser() {
     if (navLinksContainer) {
       navLinksContainer.innerHTML = `
         <a href="index.html" class="nav-link">Home</a>
-        <a href="#how-it-works" class="nav-link">How It Works</a>
       `;
     }
     if (themeToggle) {

@@ -52,9 +52,7 @@ jobs:
 
       - name: Build APK
         run: |
-          cd mobile
-          npm ci
-          cd android
+          cd mobile/android
           chmod +x gradlew
           ./gradlew clean assembleDebug --no-daemon --stacktrace
 
