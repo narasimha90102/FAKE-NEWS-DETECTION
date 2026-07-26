@@ -15,11 +15,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 18
+      - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
+          cache-dependency-path: 'tests/appium/package-lock.json'
 
       - name: Setup Java 17
         uses: actions/setup-java@v4
@@ -37,6 +38,19 @@ jobs:
           name: TruthGuard-debug-apk
           path: tests/appium/app/
         continue-on-error: true
+
+      - name: Download or Build APK Fallback
+        run: |
+          mkdir -p tests/appium/app
+          if [ ! -f tests/appium/app/app-debug.apk ]; then
+            echo "APK not found from download, building debug APK..."
+            cd mobile
+            npm ci
+            cd android
+            chmod +x gradlew
+            ./gradlew assembleDebug --no-daemon
+            cp app/build/outputs/apk/debug/app-debug.apk ../../tests/appium/app/app-debug.apk
+          fi
 
       - name: Install Appium
         run: |
