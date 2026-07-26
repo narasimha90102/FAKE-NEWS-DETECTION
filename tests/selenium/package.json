@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "selenium-webdriver": "^4.15.0",
-    "chromedriver": "^120.0.0",
     "exceljs": "^4.4.0",
     "axios": "^1.6.0",
     "jest-junit": "^16.0.0"
