@@ -1,0 +1,15 @@
+{
+  "name": "truthguard-validation-tests",
+  "version": "1.0.0",
+  "description": "Deployment Status Validation Tests — 300 Test Cases",
+  "scripts": {
+    "test": "jest --runInBand --forceExit --testTimeout=30000",
+    "report": "node helpers/reporter.js"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

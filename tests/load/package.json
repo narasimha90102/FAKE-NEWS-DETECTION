@@ -1,0 +1,14 @@
+{
+  "name": "truthguard-load-tests",
+  "version": "1.0.0",
+  "description": "k6 Load & Performance Tests for TruthGuard API",
+  "scripts": {
+    "test:baseline": "k6 run baseline.js --out json=results/baseline-raw.json",
+    "test:stress": "k6 run stress.js --out json=results/stress-raw.json",
+    "report": "node reporter.js",
+    "test": "node runner.js"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
+}

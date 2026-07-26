@@ -1,0 +1,23 @@
+{
+  "name": "truthguard-appium-tests",
+  "version": "1.0.0",
+  "description": "Appium Android E2E Tests for TruthGuard — 300 Test Cases",
+  "scripts": {
+    "test": "jest --runInBand --forceExit --testTimeout=60000",
+    "report": "node helpers/reporter.js"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": ["**/suites/**/*.test.js"],
+    "testTimeout": 60000
+  },
+  "dependencies": {
+    "webdriverio": "^8.27.0",
+    "@wdio/local-runner": "^8.27.0",
+    "exceljs": "^4.4.0",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
