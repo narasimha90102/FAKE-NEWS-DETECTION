@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5050;
 
 // ─── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors({
@@ -41,10 +41,14 @@ app.get('/{*path}', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-// ─── Start server after DB is connected ───────────────────────────────────────
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`🚀 TruthGuard server running on http://localhost:${PORT}`);
-    console.log(`📡 API available at http://localhost:${PORT}/api`);
-  });
+// ─── Start server immediately (DB connects in background) ────────────────────
+app.listen(PORT, () => {
+  console.log(`🚀 TruthGuard server running on http://localhost:${PORT}`);
+  console.log(`📡 API available at http://localhost:${PORT}/api`);
+  console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
+});
+
+// Connect DB after server is already listening
+connectDB().catch((err) => {
+  console.warn('⚠️ MongoDB not connected — some features may be unavailable:', err.message);
 });

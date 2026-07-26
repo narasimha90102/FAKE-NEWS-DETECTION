@@ -69,7 +69,7 @@ jobs:
       - name: Run Selenium Tests
         working-directory: tests/selenium
         run: npm test
-        env: { BASE_URL: 'http://localhost:5173', API_URL: 'http://localhost:5000', HEADLESS: 'true' }
+        env: { BASE_URL: 'http://localhost:5173', API_URL: 'http://localhost:5050', HEADLESS: 'true' }
       - uses: actions/upload-artifact@v4
         if: always()
         with: { name: selenium-web-report, path: tests/selenium/reports/, retention-days: 30 }
@@ -181,11 +181,11 @@ jobs:
       - name: Run Baseline Load Test
         working-directory: tests/load
         run: k6 run baseline.js --out json=results/baseline-raw.json
-        env: { API_URL: 'http://localhost:5000', BASE_URL: 'http://localhost:5000' }
+        env: { API_URL: 'http://localhost:5050', BASE_URL: 'http://localhost:5050' }
       - name: Run Stress Test
         working-directory: tests/load
         run: k6 run stress.js --out json=results/stress-raw.json
-        env: { API_URL: 'http://localhost:5000', BASE_URL: 'http://localhost:5000' }
+        env: { API_URL: 'http://localhost:5050', BASE_URL: 'http://localhost:5050' }
       - name: Generate Report
         working-directory: tests/load
         run: node reporter.js

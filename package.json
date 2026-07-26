@@ -4,10 +4,10 @@
   "description": "TruthGuard - AI Fake News Detection Platform",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "server": "node backend/server.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "node --watch backend/server.js",
     "dev:frontend": "vite",
+    "server": "node backend/server.js",
     "start": "node backend/server.js",
     "build": "vite build",
     "preview": "vite preview"
@@ -29,9 +29,10 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "concurrently": "^8.2.2",
     "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.16",
     "serve": "^14.2.4",
+    "tailwindcss": "^3.4.16",
     "vite": "^6.0.3"
   }
 }

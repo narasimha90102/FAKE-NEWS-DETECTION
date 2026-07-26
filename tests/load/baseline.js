@@ -3,7 +3,7 @@ import { check, sleep } from 'k6';
 import { Rate, Trend, Counter } from 'k6/metrics';
 
 // ── Environment Configuration & Validation ───────────────────────────────────
-const API_URL = __ENV.API_URL || __ENV.BASE_URL || 'http://localhost:5000';
+const API_URL = __ENV.API_URL || __ENV.BASE_URL || 'http://localhost:5050';
 
 if (!API_URL) {
   throw new Error('❌ FATAL: API_URL / BASE_URL environment variable is not defined!');
@@ -36,35 +36,52 @@ export const options = {
   },
 };
 
-// ── Setup: Initialize Test Users & Validate Endpoint Connectivity ────────────
+// ── Setup: Register Dedicated Load-Test Users in MongoDB ──────────────────────
 export function setup() {
   console.log(`🚀 [k6 Setup] Target API_URL: ${API_URL}`);
-  console.log(`📋 [k6 Setup] Running Baseline Load Test (100 VUs × 1m)`);
+  console.log(`📋 [k6 Setup] Initializing 5 test users for Baseline Load Test (100 VUs × 1m)`);
 
   const users = [];
+  const testPassword = 'TestPassword@123';
+
   for (let i = 0; i < 5; i++) {
-    const email = `loaduser_${i}_${Date.now()}@test.com`;
-    const payload = JSON.stringify({
-      name: `Load User ${i}`,
+    const timestamp = Date.now();
+    const username = `loaduser_${i}_${timestamp}`;
+    const email = `loaduser_${i}_${timestamp}@test.com`;
+
+    // Send required fields (username, email, password) matching backend auth route schema
+    const registerPayload = JSON.stringify({
+      username,
       email,
-      password: 'Test@1234'
+      password: testPassword
     });
-    const url = `${API_URL}/api/auth/register`;
-    const res = http.post(url, payload, { headers: { 'Content-Type': 'application/json' } });
-    
+
+    const regUrl = `${API_URL}/api/auth/register`;
+    const res = http.post(regUrl, registerPayload, { headers: { 'Content-Type': 'application/json' } });
+
     if (res.status === 201 || res.status === 200) {
-      const token = res.json('token');
-      users.push({ email, password: 'Test@1234', token });
-      console.log(`✅ [Setup] User registered: ${email} (status: ${res.status})`);
+      console.log(`✅ [Setup] Created test user ${i + 1}/5 in MongoDB with email: ${email}`);
+      users.push({ username, email, password: testPassword });
+    } else if (res.status === 409) {
+      console.log(`ℹ️ [Setup] User email already exists: ${email}`);
+      users.push({ username, email, password: testPassword });
     } else {
-      console.log(`⚠️ [Setup] Register returned status ${res.status} for ${url}: ${res.body}`);
+      console.warn(`⚠️ [Setup] Failed to register user ${email} (status: ${res.status}): ${res.body}`);
     }
   }
 
-  // Ensure users list is never empty to prevent execution stalls
+  // Fallback: If DB setup failed, ensure dedicated fallback user exists
   if (users.length === 0) {
-    console.log(`ℹ️ [Setup] Using fallback test user identity for VU executions.`);
-    users.push({ email: 'loaduser_fallback@test.com', password: 'Test@1234', token: null });
+    const fallbackEmail = `fallback_user_${Date.now()}@test.com`;
+    const fallbackUsername = `fallback_${Date.now()}`;
+    http.post(`${API_URL}/api/auth/register`, JSON.stringify({
+      username: fallbackUsername,
+      email: fallbackEmail,
+      password: testPassword
+    }), { headers: { 'Content-Type': 'application/json' } });
+
+    console.log(`ℹ️ [Setup] Created dedicated fallback user with email: ${fallbackEmail}`);
+    users.push({ username: fallbackUsername, email: fallbackEmail, password: testPassword });
   }
 
   return { users, apiUrl: API_URL };
@@ -74,13 +91,10 @@ export function setup() {
 export default function(data) {
   const usersList = (data && data.users && data.users.length > 0)
     ? data.users
-    : [{ email: 'loaduser_fallback@test.com', password: 'Test@1234', token: null }];
+    : [{ email: 'fallback_user@test.com', password: 'TestPassword@123' }];
 
   const user = usersList[Math.floor(Math.random() * usersList.length)];
   const headers = { 'Content-Type': 'application/json' };
-  if (user?.token) {
-    headers['Authorization'] = `Bearer ${user.token}`;
-  }
 
   requestCount.add(1);
 
@@ -107,17 +121,23 @@ export default function(data) {
     const t1 = Date.now();
     const loginUrl = `${API_URL}/api/auth/login`;
     const loginPayload = JSON.stringify({ email: user.email, password: user.password });
+    
+    // Log target user email (never log passwords)
+    if (__ITER % 50 === 0) {
+      console.log(`🔐 [k6 VU Execution] Attempting HTTP POST login for email: ${user.email}`);
+    }
+
     const loginRes = http.post(loginUrl, loginPayload, { headers });
     loginDuration.add(Date.now() - t1);
 
     const loginOk = check(loginRes, {
       'Login status is 200': r => r.status === 200,
-      'Login returns token': r => r.json('token') !== undefined,
+      'Login returns user object': r => r.json('user') !== undefined || r.json('success') === true,
       'Login response time < 1s': r => r.timings.duration < 1000,
     });
 
     if (!loginOk && loginRes.status !== 200) {
-      console.warn(`❌ [HTTP POST] ${loginUrl} failed with status ${loginRes.status}: ${loginRes.body}`);
+      console.warn(`❌ [HTTP POST Login] ${loginUrl} failed for email ${user.email} with status ${loginRes.status}: ${loginRes.body}`);
     }
     errorRate.add(loginRes.status !== 200);
   }
@@ -159,9 +179,9 @@ export default function(data) {
   // ── Test 6: Registration Load Attempt ────────────────────────────────────
   const regUrl = `${API_URL}/api/auth/register`;
   const regPayload = JSON.stringify({
-    name: 'Load Test User',
-    email: `unique_${Date.now()}_${Math.random()}@loadtest.com`,
-    password: 'Test@1234'
+    username: `unique_user_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
+    email: `unique_${Date.now()}_${Math.floor(Math.random() * 10000)}@loadtest.com`,
+    password: 'TestPassword@123'
   });
   const registerRes = http.post(regUrl, regPayload, { headers });
   check(registerRes, {

@@ -4,7 +4,7 @@ const { generateExcelReport, REPORTS_DIR } = require('../helpers/reporter');
 const path = require('path');
 const axios = require('axios');
 
-const API_URL = process.env.API_URL || 'http://localhost:5000';
+const API_URL = process.env.API_URL || 'http://localhost:5050';
 const results = [];
 let driver, authToken;
 const TEST_USER = { email: `profile_${Date.now()}@test.com`, password: 'Test@1234', name: 'Profile User' };

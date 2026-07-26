@@ -3,7 +3,7 @@ import { check, sleep } from 'k6';
 import { Rate } from 'k6/metrics';
 
 // ── Environment Configuration & Validation ───────────────────────────────────
-const API_URL = __ENV.API_URL || __ENV.BASE_URL || 'http://localhost:5000';
+const API_URL = __ENV.API_URL || __ENV.BASE_URL || 'http://localhost:5050';
 
 if (!API_URL) {
   throw new Error('❌ FATAL: API_URL / BASE_URL environment variable is not defined!');
