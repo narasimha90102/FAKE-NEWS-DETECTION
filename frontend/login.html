@@ -50,25 +50,27 @@
 
     <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
       <div class="form-group">
-        <label class="form-label" for="login-input">Username or Email Address</label>
+        <label class="form-label" for="login-input">Email Address</label>
         <div class="form-input-wrap">
           <input
-            type="text"
-            id="login-input"
+            type="email"
+            id="email"
+            name="email"
             class="form-input"
-            placeholder="Enter your username or email"
+            placeholder="Enter your email address"
             required
-            autocomplete="username"
+            autocomplete="email"
           />
         </div>
       </div>
 
       <div class="form-group">
-        <label class="form-label" for="login-password">Password</label>
+        <label class="form-label" for="password">Password</label>
         <div class="form-input-wrap">
           <input
             type="password"
-            id="login-password"
+            id="password"
+            name="password"
             class="form-input"
             placeholder="Enter your password"
             required
@@ -77,7 +79,7 @@
           <button
             type="button"
             class="toggle-pwd-btn"
-            onclick="togglePasswordVisibility('login-password', this)"
+            onclick="togglePasswordVisibility('password', this)"
           >
             👁️
           </button>
@@ -136,19 +138,23 @@
 
   function handleLogin(e) {
     e.preventDefault();
-    const loginInput = document.getElementById('login-input').value.trim();
-    const pwdVal = document.getElementById('login-password').value;
-    const rememberMe = document.getElementById('remember-me').checked;
+    const loginInput = (document.getElementById('email') || document.getElementById('login-input')).value.trim();
+    const pwdVal = (document.getElementById('password') || document.getElementById('login-password')).value;
+    const rememberMe = document.getElementById('remember-me') ? document.getElementById('remember-me').checked : false;
     const btn = document.getElementById('login-submit-btn');
 
-    btn.disabled = true;
+    if (btn) btn.disabled = true;
 
     const res = loginUser(loginInput, pwdVal, rememberMe);
     if (!res.success) {
       showToast(res.message, 'error');
-      btn.disabled = false;
+      if (btn) btn.disabled = false;
       return;
     }
+
+    const mockJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' + btoa(JSON.stringify({ id: res.user.id, email: res.user.email })) + '.mocksignature';
+    localStorage.setItem('token', mockJwt);
+    localStorage.setItem('auth_token', mockJwt);
 
     showToast('Login successful! Redirecting...', 'success');
 

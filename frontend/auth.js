@@ -448,10 +448,13 @@ function renderNavbarUser() {
     }
   } else {
     if (navLinksContainer) {
-      navLinksContainer.innerHTML = '';
+      navLinksContainer.innerHTML = `
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+      `;
     }
     if (themeToggle) {
-      themeToggle.style.display = 'none';
+      themeToggle.style.display = 'flex';
     }
     
     const cta = document.createElement('div');
@@ -459,7 +462,7 @@ function renderNavbarUser() {
     cta.id = 'nav-auth-container';
     cta.innerHTML = `
       <a href="login.html" class="nav-link-btn">Log In</a>
-      <a href="register.html" class="nav-cta"><span>Sign Up</span></a>
+      <a href="register.html" class="nav-cta"><span>Register</span></a>
     `;
     if (existingCta) existingCta.replaceWith(cta);
     else navContainer.appendChild(cta);
