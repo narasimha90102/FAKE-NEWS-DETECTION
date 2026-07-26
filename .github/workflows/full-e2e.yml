@@ -174,15 +174,18 @@ jobs:
           curl -s https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/k6-archive-keyring.gpg
           echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
           sudo apt-get update && sudo apt-get install -y k6
+      - name: Create required output directories
+        working-directory: tests/load
+        run: mkdir -p results reports artifacts
       - run: cd tests/load && npm ci
       - name: Run Baseline Load Test
         working-directory: tests/load
         run: k6 run baseline.js --out json=results/baseline-raw.json
-        env: { API_URL: 'http://localhost:5000' }
+        env: { API_URL: 'http://localhost:5000', BASE_URL: 'http://localhost:5000' }
       - name: Run Stress Test
         working-directory: tests/load
         run: k6 run stress.js --out json=results/stress-raw.json
-        env: { API_URL: 'http://localhost:5000' }
+        env: { API_URL: 'http://localhost:5000', BASE_URL: 'http://localhost:5000' }
       - name: Generate Report
         working-directory: tests/load
         run: node reporter.js
