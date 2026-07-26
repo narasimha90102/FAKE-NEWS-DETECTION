@@ -2,4 +2,3 @@ pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
 
 rootProject.name = 'TruthGuard'
 include ':app'
-includeBuild('../node_modules/@react-native/gradle-plugin')

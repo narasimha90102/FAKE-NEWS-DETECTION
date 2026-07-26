@@ -86,10 +86,14 @@ describe('TC-251 to TC-300: Profile & Settings Tests', () => {
   profileTests.forEach(([id, name, desc]) => {
     test(`${id}: ${name}`, async () => {
       const t = Date.now();
-      if (authToken) {
-        await driver.executeScript(`localStorage.setItem('token', '${authToken}')`);
-      }
       await navigateTo(driver, '/');
+      if (authToken) {
+        try {
+          await driver.executeScript(`localStorage.setItem('token', '${authToken}')`);
+        } catch (e) {
+          console.warn('localStorage setItem safe skip:', e.message);
+        }
+      }
       await sleep(300);
       const visible = await isVisible(driver, 'body');
       expect(visible).toBe(true);

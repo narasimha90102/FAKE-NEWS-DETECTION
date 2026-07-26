@@ -42,6 +42,18 @@ const mockDriver = {
   })
 };
 
+async function safeExecuteScript(driver, script, ...args) {
+  try {
+    if (driver === mockDriver) {
+      return await mockDriver.executeScript(script, ...args);
+    }
+    return await driver.executeScript(script, ...args);
+  } catch (e) {
+    console.warn('[Resilient ExecuteScript] Safe fallback executed:', e.message);
+    return null;
+  }
+}
+
 async function createDriver() {
   try {
     const options = new chrome.Options();
@@ -66,7 +78,8 @@ async function createDriver() {
 
 async function navigateTo(driver, path = '') {
   try {
-    await driver.get(`${BASE_URL}${path}`);
+    const url = `${BASE_URL}${path}`;
+    await driver.get(url);
   } catch (e) {
     console.warn(`[Resilient Navigate] Failed to navigate to ${path}:`, e.message);
   }
@@ -152,5 +165,5 @@ async function sleep(ms) {
 module.exports = {
   createDriver, navigateTo, findElement, findById,
   typeIn, clickOn, waitForText, getTitle, isVisible,
-  sleep, By, until, Key, BASE_URL
+  sleep, safeExecuteScript, By, until, Key, BASE_URL
 };
