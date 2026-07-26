@@ -12,21 +12,16 @@
     "testMatch": ["**/suites/**/*.test.js"],
     "globalSetup": "./helpers/setup.js",
     "globalTeardown": "./helpers/teardown.js",
-    "setupFilesAfterFramework": [],
-    "reporters": [
-      "default",
-      ["jest-junit", { "outputDirectory": "reports", "outputName": "junit.xml" }]
-    ],
     "testTimeout": 30000
   },
   "dependencies": {
     "selenium-webdriver": "^4.15.0",
     "chromedriver": "^120.0.0",
     "exceljs": "^4.4.0",
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "jest-junit": "^16.0.0"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
-    "jest-junit": "^16.0.0"
+    "jest": "^29.7.0"
   }
 }
