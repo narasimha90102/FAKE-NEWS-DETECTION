@@ -42,7 +42,10 @@ jobs:
             echo "Keystore already exists, skipping generation."
           fi
       - name: Build APK
-        run: cd mobile/android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
+        run: |
+          cd mobile/android
+          chmod +x gradlew
+          ./gradlew clean assembleDebug --no-daemon --stacktrace --info
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
