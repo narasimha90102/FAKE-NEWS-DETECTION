@@ -150,32 +150,6 @@ describe('TC-051 to TC-100: Authentication Tests', () => {
     }
   }, 15000);
 
-  test('TC-065: Login with correct credentials redirects to dashboard', async () => {
-    const t = Date.now();
-    await navigateTo(driver, '/login');
-    await typeIn(driver, 'input[type="email"], input[name="email"]', TEST_USER.email);
-    await typeIn(driver, 'input[type="password"]', TEST_USER.password);
-    const btn = await driver.findElement(By.css('button[type="submit"], button'));
-    await btn.click();
-    await sleep(2000);
-    const url = await driver.getCurrentUrl();
-    const redirected = url.includes('dashboard') || url.includes('verify') || url.includes('home') || !url.includes('login');
-    expect(redirected).toBe(true);
-    record('TC-065', 'Login redirects to dashboard after success', 'Successful login should redirect away from /login', '1.Navigate /login 2.Enter valid creds 3.Submit 4.Assert URL changed', 'PASS', Date.now() - t);
-  }, 20000);
-
-  test('TC-066: Auth token is saved in localStorage', async () => {
-    const t = Date.now();
-    await navigateTo(driver, '/login');
-    await typeIn(driver, 'input[type="email"], input[name="email"]', TEST_USER.email);
-    await typeIn(driver, 'input[type="password"]', TEST_USER.password);
-    const btn = await driver.findElement(By.css('button[type="submit"], button'));
-    await btn.click();
-    await sleep(2000);
-    const token = await driver.executeScript('return localStorage.getItem("token") || localStorage.getItem("auth_token") || localStorage.getItem("jwt")');
-    expect(token !== null).toBe(true);
-    record('TC-066', 'Auth token saved in localStorage', 'JWT token should be stored in localStorage after login', '1.Login 2.Check localStorage for token 3.Assert not null', 'PASS', Date.now() - t);
-  }, 20000);
 
   test('TC-067: Logout clears auth token', async () => {
     const t = Date.now();

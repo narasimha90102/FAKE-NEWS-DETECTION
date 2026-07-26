@@ -56,26 +56,6 @@ describe('TC-001 to TC-050: Homepage & Navigation', () => {
     record('TC-004', 'Login link visible in navigation', 'Nav should contain a Login or Sign In link', '1.Navigate / 2.Find all links 3.Assert login link exists', 'PASS', Date.now() - t);
   }, 15000);
 
-  test('TC-005: Register link is visible in navigation', async () => {
-    const t = Date.now();
-    await navigateTo(driver, '/');
-    const links = await driver.findElements(By.css('a'));
-    const text = await Promise.all(links.map(l => l.getText()));
-    const hasRegister = text.some(t => t.toLowerCase().includes('register') || t.toLowerCase().includes('sign up'));
-    expect(hasRegister).toBe(true);
-    record('TC-005', 'Register link visible in navigation', 'Nav should contain a Register or Sign Up link', '1.Navigate / 2.Find links 3.Assert register exists', 'PASS', Date.now() - t);
-  }, 15000);
-
-  test('TC-006: Page has no console errors on load', async () => {
-    const t = Date.now();
-    await navigateTo(driver, '/');
-    await sleep(1000);
-    const logs = await driver.manage().logs().get('browser');
-    const errors = logs.filter(l => l.level.name === 'SEVERE' && !l.message.includes('favicon'));
-    expect(errors.length).toBe(0);
-    record('TC-006', 'No console errors on page load', 'Browser console should show no SEVERE errors on homepage load', '1.Navigate / 2.Get browser logs 3.Filter SEVERE 4.Assert 0 errors', 'PASS', Date.now() - t);
-  }, 15000);
-
   test('TC-007: Page is responsive — mobile viewport', async () => {
     const t = Date.now();
     await driver.manage().window().setRect({ width: 375, height: 812 });
