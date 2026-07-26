@@ -58,14 +58,14 @@ jobs:
           echo "JWT_SECRET=test_jwt_secret_for_ci" >> .env
           echo "GROQ_API_KEY=gsk_test_placeholder" >> .env
           node backend/server.js > /tmp/server.log 2>&1 &
-          sleep 10
-          for i in {1..10}; do
+          sleep 15
+          for i in {1..15}; do
             if curl -sf http://localhost:5050/api/health; then
               echo "✅ Backend is healthy"
               exit 0
             fi
-            echo "Health check attempt $i/10 failed, retrying..."
-            sleep 2
+            echo "Health check attempt $i/15 failed, retrying..."
+            sleep 3
           done
           echo "❌ Backend health check failed"
           cat /tmp/server.log
@@ -74,8 +74,16 @@ jobs:
       - name: Build & serve frontend
         run: |
           npm run build
-          npx --yes serve -s dist -l 5173 &
-          sleep 3
+          npx --yes serve -s dist -l 5173 > /tmp/frontend.log 2>&1 &
+          sleep 5
+          for i in {1..10}; do
+            if curl -sf http://localhost:5173; then
+              echo "✅ Frontend is ready"
+              exit 0
+            fi
+            echo "Frontend check attempt $i/10 failed, retrying..."
+            sleep 1
+          done
 
       - name: Run Selenium Tests
         working-directory: tests/selenium
