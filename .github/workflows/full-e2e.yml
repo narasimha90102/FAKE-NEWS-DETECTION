@@ -32,11 +32,15 @@ jobs:
       - name: Generate keystore
         run: |
           mkdir -p mobile/android/app
-          keytool -genkey -v \
-            -keystore mobile/android/app/debug.keystore \
-            -storepass android -alias androiddebugkey \
-            -keypass android -keyalg RSA -keysize 2048 -validity 10000 \
-            -dname "CN=Debug,O=Android,C=US"
+          if [ ! -f mobile/android/app/debug.keystore ]; then
+            keytool -genkeypair -v \
+              -keystore mobile/android/app/debug.keystore \
+              -storepass android -alias androiddebugkey \
+              -keypass android -keyalg RSA -keysize 2048 -validity 10000 \
+              -dname "CN=Debug,O=Android,C=US" -storetype JKS
+          else
+            echo "Keystore already exists, skipping generation."
+          fi
       - name: Build APK
         run: cd mobile/android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
       - name: Upload APK
