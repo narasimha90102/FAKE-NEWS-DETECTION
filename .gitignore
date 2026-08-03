@@ -7,3 +7,9 @@ dist/
 .DS_Store
 *.log
 mobile/android/app/debug.keystore
+
+# Backend & Frontend env files (covered by patterns above, but explicit for clarity)
+backend/.env
+backend/.env.local
+frontend/.env
+frontend/.env.local

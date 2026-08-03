@@ -5,15 +5,15 @@ buildscript {
         compileSdkVersion = 34
         targetSdkVersion = 34
         ndkVersion = "25.1.8937393"
-        kotlinVersion = "1.8.0"
+        kotlinVersion = "1.9.24"
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.1.1")
-        classpath("com.facebook.react:react-native-gradle-plugin:0.73.1")
+        classpath("com.android.tools.build:gradle:8.1.4")
+        classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
@@ -22,6 +22,29 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://www.jitpack.io' }
+        maven { url 'https://jitpack.io' }
+    }
+
+    // ── Force-resolve Netty tcnative to a version available on Maven Central ──
+    // The error occurs because Gradle tries to fetch netty-tcnative-parent from
+    // Google's Maven repo (which doesn't host it). This constraint forces the
+    // resolution to a known-good version that Maven Central serves correctly.
+    configurations.configureEach {
+        resolutionStrategy {
+            // If any transitive dependency requests netty-tcnative-parent, pin it
+            // to a version that Maven Central reliably hosts
+            eachDependency { details ->
+                if (details.requested.group == 'io.netty' &&
+                    details.requested.name.startsWith('netty-tcnative')) {
+                    details.useVersion '2.0.65.Final'
+                    details.because 'Force netty-tcnative to a Maven Central-available version'
+                }
+            }
+            // Don't cache missing modules — retry on next build
+            cacheDynamicVersionsFor 0, 'seconds'
+            cacheChangingModulesFor 0, 'seconds'
+        }
     }
 }
+
+apply plugin: "com.facebook.react.rootproject"

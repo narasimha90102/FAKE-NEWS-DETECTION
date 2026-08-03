@@ -1,4 +1,16 @@
-pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
-
 rootProject.name = 'TruthGuard'
+
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+
 include ':app'
+includeBuild('../node_modules/@react-native/gradle-plugin')
+
+dependencyResolutionManagement {
+    // PREFER_SETTINGS so RN native modules can still declare repos, but these are the defaults
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}

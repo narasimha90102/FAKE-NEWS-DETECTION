@@ -31,12 +31,26 @@ jobs:
       - name: Install mobile deps
         run: cd mobile && npm ci
 
-      - name: Cache Gradle
+      # ── Gradle cache (wrapper + build caches) ──────────────────────
+      - name: Cache Gradle wrapper
         uses: actions/cache@v4
         with:
-          path: ~/.gradle/caches
-          key: gradle-${{ hashFiles('mobile/android/**/*.gradle*') }}
+          path: ~/.gradle/wrapper
+          key: gradle-wrapper-${{ hashFiles('mobile/android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-wrapper-
 
+      - name: Cache Gradle caches
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/configuration-cache
+          key: gradle-caches-${{ hashFiles('mobile/android/**/*.gradle*', 'mobile/android/gradle.properties') }}
+          restore-keys: |
+            gradle-caches-
+
+      # ── Generate debug keystore if needed ──────────────────────────
       - name: Generate keystore
         run: |
           mkdir -p mobile/android/app
@@ -50,18 +64,57 @@ jobs:
             echo "Keystore already exists, skipping generation."
           fi
 
-      - name: Build APK
+      # ── Clean stale Gradle state ──────────────────────────────────
+      - name: Clean Gradle state
         run: |
           cd mobile/android
           chmod +x gradlew
-          ./gradlew clean assembleDebug \
-            --stacktrace \
-            --info \
-            --warning-mode all \
-            --no-daemon
+          rm -rf .gradle/buildOutputCleanup
+          ./gradlew clean --no-daemon 2>/dev/null || true
 
+      # ── Build APK with retry logic (up to 3 attempts) ─────────────
+      - name: Build APK (with retry)
+        run: |
+          cd mobile/android
+          chmod +x gradlew
+
+          MAX_RETRIES=3
+          ATTEMPT=0
+          EXIT_CODE=1
+
+          while [ $ATTEMPT -lt $MAX_RETRIES ]; do
+            ATTEMPT=$((ATTEMPT + 1))
+            echo "━━━ Build attempt $ATTEMPT of $MAX_RETRIES ━━━"
+
+            ./gradlew assembleDebug \
+              --refresh-dependencies \
+              --stacktrace \
+              --info \
+              --warning-mode all \
+              --no-daemon \
+              -Dorg.gradle.dependency.verification=off && EXIT_CODE=0 && break
+
+            EXIT_CODE=$?
+            echo "⚠️ Attempt $ATTEMPT failed with exit code $EXIT_CODE"
+
+            if [ $ATTEMPT -lt $MAX_RETRIES ]; then
+              echo "🔄 Cleaning caches and retrying in 10s..."
+              rm -rf ~/.gradle/caches/modules-2/files-2.1/io.netty 2>/dev/null || true
+              rm -rf ~/.gradle/caches/modules-2/metadata-*/descriptors/io.netty 2>/dev/null || true
+              sleep 10
+            fi
+          done
+
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "❌ Build failed after $MAX_RETRIES attempts"
+            exit $EXIT_CODE
+          fi
+          echo "✅ Build succeeded on attempt $ATTEMPT"
+
+      # ── Upload artifact ────────────────────────────────────────────
       - name: Upload APK
         uses: actions/upload-artifact@v4
+        if: success()
         with:
           name: TruthGuard-debug-apk
           path: mobile/android/app/build/outputs/apk/debug/app-debug.apk

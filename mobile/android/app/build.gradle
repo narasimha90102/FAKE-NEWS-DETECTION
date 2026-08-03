@@ -3,10 +3,10 @@ apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
 react {
-    root = "../../"
-    reactNativeDir = "../../node_modules/react-native"
-    codegenDir = "../../node_modules/@react-native/codegen"
-    cliPath = "node_modules/react-native/cli.js"
+    root = file("../../")
+    reactNativeDir = file("../../node_modules/react-native")
+    codegenDir = file("../../node_modules/@react-native/codegen")
+    cliFile = file("../../node_modules/react-native/cli.js")
 }
 
 def enableProguardInReleaseBuilds = true
@@ -47,16 +47,42 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
+
+    // Resolve duplicate native library conflicts from RN transitive deps
+    packagingOptions {
+        pickFirst '**/libc++_shared.so'
+        pickFirst '**/libfbjni.so'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 dependencies {
     implementation("com.facebook.react:react-android")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
-    if (project.hasProperty("hermesEnabled") && hermesEnabled.toBoolean()) {
+    if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
-        implementation jscFlavor
+        implementation(jscFlavor)
+    }
+
+    // Force Netty tcnative to a resolvable version (prevents Google Maven 404)
+    constraints {
+        implementation("io.netty:netty-tcnative:2.0.65.Final") {
+            because "Pin to a version available on Maven Central"
+        }
+        implementation("io.netty:netty-tcnative-boringssl-static:2.0.65.Final") {
+            because "Pin to a version available on Maven Central"
+        }
     }
 }
 
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
