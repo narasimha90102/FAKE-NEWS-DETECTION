@@ -9,6 +9,7 @@ dependencyResolutionManagement {
     // PREFER_SETTINGS so RN native modules can still declare repos, but these are the defaults
     repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
+        maven { url '../local-maven' }
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' }
