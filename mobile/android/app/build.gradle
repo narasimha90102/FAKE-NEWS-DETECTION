@@ -7,6 +7,10 @@ react {
     reactNativeDir = file("../../node_modules/react-native")
     codegenDir = file("../../node_modules/@react-native/codegen")
     cliFile = file("../../node_modules/react-native/cli.js")
+
+    // Clear debuggableVariants so the plugin bundles the JS code/assets in debug mode,
+    // allowing the debug APK to run standalone without a Metro server connection.
+    debuggableVariants = []
 }
 
 def enableProguardInReleaseBuilds = true
