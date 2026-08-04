@@ -15,6 +15,7 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 android {
     buildToolsVersion "33.0.1"
     compileSdk 34
+    ndkVersion "25.1.8937393"
 
     namespace "com.truthguard"
     defaultConfig {
