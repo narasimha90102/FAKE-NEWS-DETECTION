@@ -1,4 +1,4 @@
-# TruthGuard 🛡️ — AI Fake News Detection Platform
+# TruthCheck 🛡️ — AI Fake News Detection Platform
 
 ## Project Structure
 

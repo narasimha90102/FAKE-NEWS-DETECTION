@@ -32,7 +32,7 @@ async function compileMasterReport() {
   const summarySheet = wb.addWorksheet('🏆 Master Summary', { views: [{ showGridLines: false }] });
   summarySheet.mergeCells('A1:G1');
   const titleCell = summarySheet.getCell('A1');
-  titleCell.value = 'TruthGuard — Master End-to-End Test Suite Execution Report';
+  titleCell.value = 'TruthCheck — Master End-to-End Test Suite Execution Report';
   titleCell.font = { bold: true, size: 16, color: { argb: 'FFFFFFFF' } };
   titleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOURS.title } };
   titleCell.alignment = { horizontal: 'center', vertical: 'middle' };

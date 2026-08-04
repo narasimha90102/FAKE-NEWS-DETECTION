@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Default to localhost:5050 (Use 10.0.2.2 for Android Emulator or LAN IP for physical device)
-export const API_BASE_URL = 'http://10.0.2.2:5050/api';
+// Render Backend URL for production APK builds & mobile testing
+export const API_BASE_URL = 'https://fake-news-detection-zmkd.onrender.com/api';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
