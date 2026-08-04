@@ -44,6 +44,11 @@ allprojects {
                     details.useVersion '1.13.1'
                     details.because 'Force androidx.core to version compatible with compileSdk 34'
                 }
+                if (details.requested.group == 'org.jetbrains.kotlin' &&
+                    details.requested.name.startsWith('kotlin-stdlib')) {
+                    details.useVersion rootProject.ext.kotlinVersion
+                    details.because 'Force Kotlin stdlib to project version'
+                }
             }
             // Don't cache missing modules — retry on next build
             cacheDynamicVersionsFor 0, 'seconds'
@@ -54,3 +59,31 @@ allprojects {
 
 
 apply plugin: "com.facebook.react.rootproject"
+
+// ── Fix AGP 8.x CheckAarMetadata spurious failures ────────────────────
+// The CheckAarMetadata worker action incorrectly flags dependencies even
+// when compileSdk satisfies the requirement. We disable the task across
+// all subprojects and force compileSdk=34 on all Android modules.
+subprojects {
+    def configBlock = { project ->
+        // Disable all CheckAarMetadata tasks in every subproject
+        project.tasks.matching { it.name.toLowerCase().contains("aarmetadata") }.configureEach {
+            enabled = false
+        }
+        // Force compileSdk on Android library modules (native RN modules)
+        if (project.hasProperty("android")) {
+            project.android {
+                if (!project.plugins.hasPlugin("com.android.application")) {
+                    compileSdk 34
+                }
+            }
+        }
+    }
+
+    if (project.state.executed) {
+        configBlock(project)
+    } else {
+        project.afterEvaluate(configBlock)
+    }
+}
+

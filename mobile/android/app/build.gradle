@@ -14,13 +14,13 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
     buildToolsVersion "33.0.1"
-    compileSdkVersion 34
+    compileSdk 34
 
     namespace "com.truthguard"
     defaultConfig {
         applicationId "com.truthguard"
-        minSdkVersion 24
-        targetSdkVersion 34
+        minSdk 24
+        targetSdk 34
         versionCode 1
         versionName "1.0.0"
         vectorDrawables.useSupportLibrary = true
@@ -85,3 +85,4 @@ dependencies {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
