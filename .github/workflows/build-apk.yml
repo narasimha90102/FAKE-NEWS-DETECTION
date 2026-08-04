@@ -1,4 +1,4 @@
-name: 🤖 TruthGuard — Build Android APK
+name: TruthCheck
 
 on:
   push:
@@ -29,30 +29,34 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
-          api-level: 33
-          build-tools: "33.0.2"
+          api-level: 34
+          build-tools: "33.0.1"
           ndk: "25.1.8937393"
           cmake: "3.22.1"
 
-      - name: Install Android NDK
+      - name: Accept Android licenses
+        run: yes | sdkmanager --licenses
+
+      - name: Install Android SDK packages
         run: |
-          yes | sdkmanager \
+          sdkmanager \
             "platform-tools" \
-            "platforms;android-33" \
-            "build-tools;33.0.2" \
+            "platforms;android-34" \
+            "build-tools;33.0.1" \
             "ndk;25.1.8937393" \
             "cmake;3.22.1"
-  
-          sdkmanager --list | grep ndk || true
-        env:
-          ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
 
-      - name: Configure NDK
+      - name: Configure Android NDK
         run: |
           echo "ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.1.8937393" >> $GITHUB_ENV
           echo "ANDROID_NDK_ROOT=$ANDROID_SDK_ROOT/ndk/25.1.8937393" >> $GITHUB_ENV
-  
+
+      - name: Verify Android SDK
+        run: |
+          sdkmanager --list
+          ls -la $ANDROID_SDK_ROOT/build-tools
           ls -la $ANDROID_SDK_ROOT/ndk
+
 
       - name: Install mobile deps
         run: cd mobile && npm ci
