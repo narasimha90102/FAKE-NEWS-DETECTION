@@ -1,4 +1,4 @@
-name: 🛡️ TruthGuard — Full CI/CD Pipeline
+name: 🛡️ TruthCheck — Full CI/CD Pipeline
 
 on:
   push:

@@ -44,7 +44,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         return false;
       }
     } catch (err: any) {
-      const msg = err.response?.data?.error || 'Login failed. Please check network.';
+      const msg = err.response?.data?.error || err.message || 'Login failed. Please check network connection.';
       set({ error: msg, isLoading: false });
       return false;
     }
@@ -65,7 +65,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         return false;
       }
     } catch (err: any) {
-      const msg = err.response?.data?.error || 'Registration failed.';
+      const msg = err.response?.data?.error || err.message || 'Registration failed. Please check network connection.';
       set({ error: msg, isLoading: false });
       return false;
     }

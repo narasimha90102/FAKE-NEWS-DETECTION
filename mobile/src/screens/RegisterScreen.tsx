@@ -25,7 +25,7 @@ export const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) =>
       <View style={styles.content}>
         <View style={styles.logoHeader}>
           <Text style={styles.title}>Create Account</Text>
-          <Text style={styles.subtitle}>Join TruthGuard Fact Checking Community</Text>
+          <Text style={styles.subtitle}>Join TruthCheck Fact Checking Community</Text>
         </View>
 
         <View style={styles.card}>
