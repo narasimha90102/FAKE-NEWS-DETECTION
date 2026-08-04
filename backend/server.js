@@ -33,7 +33,7 @@ app.use('/api/analyze', analyzeRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'TruthGuard API is running 🛡️' });
+  res.json({ status: 'ok', message: 'TruthCheck API is running ✅' });
 });
 
 // ─── Catch-all: serve index.html for frontend routes ─────────────────────────
@@ -43,7 +43,7 @@ app.get('/{*path}', (req, res) => {
 
 // ─── Start server immediately (DB connects in background) ────────────────────
 app.listen(PORT, () => {
-  console.log(`🚀 TruthGuard server running on http://localhost:${PORT}`);
+  console.log(`🚀 TruthCheck server running on http://localhost:${PORT}`);
   console.log(`📡 API available at http://localhost:${PORT}/api`);
   console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
 });

@@ -20,9 +20,9 @@ android {
     compileSdk 34
     ndkVersion "25.1.8937393"
 
-    namespace "com.truthguard"
+    namespace "com.truthcheck"
     defaultConfig {
-        applicationId "com.truthguard"
+        applicationId "com.truthcheck"
         minSdk 24
         targetSdk 34
         versionCode 1

@@ -19,7 +19,7 @@ export const ProfileScreen: React.FC = () => {
             <Text style={styles.avatarEmoji}>{user?.avatar || '🛡️'}</Text>
           </View>
           <Text style={styles.userName}>{user?.username || 'Fact Checker'}</Text>
-          <Text style={styles.userEmail}>{user?.email || 'user@truthguard.ai'}</Text>
+          <Text style={styles.userEmail}>{user?.email || 'user@truthcheck.ai'}</Text>
         </View>
 
         {/* Account Details */}

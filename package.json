@@ -1,7 +1,7 @@
 {
-  "name": "truthguard",
+  "name": "truthcheck",
   "version": "1.0.0",
-  "description": "TruthGuard - AI Fake News Detection Platform",
+  "description": "TruthCheck - AI Fact Verification Platform",
   "type": "module",
   "scripts": {
     "dev": "concurrently --kill-others-on-fail \"npm run dev:backend\" \"npm run dev:frontend\"",

@@ -30,8 +30,8 @@ export const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
           <View style={styles.iconCircle}>
             <Text style={styles.iconText}>🛡️</Text>
           </View>
-          <Text style={styles.title}>TruthGuard</Text>
-          <Text style={styles.subtitle}>AI Fake News Detection Platform</Text>
+          <Text style={styles.title}>TruthCheck</Text>
+          <Text style={styles.subtitle}>AI Fact Verification Platform</Text>
         </View>
 
         {/* Login Card (Fits viewport without scrolling) */}

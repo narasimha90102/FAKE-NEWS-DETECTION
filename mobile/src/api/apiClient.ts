@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Default to localhost:5000 (Use 10.0.2.2 for Android Emulator or LAN IP for physical device)
-export const API_BASE_URL = 'http://10.0.2.2:5000/api';
+// Default to localhost:5050 (Use 10.0.2.2 for Android Emulator or LAN IP for physical device)
+export const API_BASE_URL = 'http://10.0.2.2:5050/api';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,

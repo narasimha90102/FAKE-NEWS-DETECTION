@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Simple password hash using SHA-256 (replace with bcrypt in production)
 function hashPassword(password) {
-  return crypto.createHash('sha256').update(password + 'truthguard_salt').digest('hex');
+  return crypto.createHash('sha256').update(password + 'truthcheck_salt').digest('hex');
 }
 
 // POST /api/auth/register

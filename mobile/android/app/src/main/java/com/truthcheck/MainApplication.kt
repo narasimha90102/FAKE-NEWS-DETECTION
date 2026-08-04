@@ -1,4 +1,4 @@
-package com.truthguard
+package com.truthcheck
 
 import android.app.Application
 import com.facebook.react.PackageList
