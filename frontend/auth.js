@@ -4,8 +4,17 @@
    (web + mobile share same user database)
 ═══════════════════════════════════════════ */
 
-/* ── BACKEND API URL ── */
-const API_BASE = 'https://fake-news-detection-zmkd.onrender.com/api';
+/* ── BACKEND API URL (Uses environment variables, local port, or production fallback) ── */
+const getApiBase = () => {
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_BASE_URL) {
+    return `${import.meta.env.VITE_API_BASE_URL}/api`;
+  }
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return 'http://localhost:5050/api';
+  }
+  return 'https://fake-news-detection-zmkd.onrender.com/api';
+};
+const API_BASE = getApiBase();
 
 /* ── 25 LANGUAGES DEFINITION ── */
 const ALL_LANGUAGES = [

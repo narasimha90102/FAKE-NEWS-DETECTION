@@ -259,7 +259,10 @@ async function analyzeContent() {
     let finalResult = null;
 
     try {
-      const response = await fetchWithTimeout('/api/analyze', {
+      const apiPrefix = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://localhost:5050/api'
+        : '/api';
+      const response = await fetchWithTimeout(`${apiPrefix}/analyze`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
