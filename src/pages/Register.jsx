@@ -24,11 +24,11 @@ const Register = () => {
     noSpaces: !/\s/.test(password)
   };
 
-  const handleRegisterSubmit = (e) => {
+  const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const res = register(fullName, email, password, confirmPassword);
+    const res = await register(fullName, email, password, confirmPassword);
     setLoading(false);
 
     if (res.success) {

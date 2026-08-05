@@ -136,25 +136,21 @@
     }
   }
 
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
     const loginInput = (document.getElementById('email') || document.getElementById('login-input')).value.trim();
     const pwdVal = (document.getElementById('password') || document.getElementById('login-password')).value;
     const rememberMe = document.getElementById('remember-me') ? document.getElementById('remember-me').checked : false;
     const btn = document.getElementById('login-submit-btn');
 
-    if (btn) btn.disabled = true;
+    if (btn) { btn.disabled = true; btn.textContent = 'Signing in...'; }
 
-    const res = loginUser(loginInput, pwdVal, rememberMe);
+    const res = await loginUser(loginInput, pwdVal, rememberMe);
     if (!res.success) {
       showToast(res.message, 'error');
-      if (btn) btn.disabled = false;
+      if (btn) { btn.disabled = false; btn.textContent = 'Log In'; }
       return;
     }
-
-    const mockJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' + btoa(JSON.stringify({ id: res.user.id, email: res.user.email })) + '.mocksignature';
-    localStorage.setItem('token', mockJwt);
-    localStorage.setItem('auth_token', mockJwt);
 
     showToast('Login successful! Redirecting...', 'success');
 
@@ -172,4 +168,4 @@
   });
 </script>
 </body>
-</html>
+</html>

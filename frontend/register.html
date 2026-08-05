@@ -262,7 +262,7 @@
     });
   }
 
-  function handleRegister(e) {
+  async function handleRegister(e) {
     e.preventDefault();
     const btn = document.getElementById('reg-submit-btn');
     const fn = document.getElementById('reg-fullname').value.trim();
@@ -277,16 +277,18 @@
     if (!pRes.valid) { showToast(pRes.message, 'error'); return; }
 
     btn.disabled = true;
+    btn.textContent = 'Creating Account...';
 
-    const res = registerUser(fn, email, pwd, pwd);
+    const res = await registerUser(fn, email, pwd, pwd);
     if (!res.success) {
       showToast(res.message, 'error');
       btn.disabled = false;
+      btn.textContent = 'Create Account';
       return;
     }
 
     showToast('Account created successfully! Redirecting...', 'success');
-    setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+    setTimeout(() => { window.location.href = 'login.html?registered=1'; }, 1000);
   }
 </script>
 <script>
@@ -295,4 +297,4 @@
   });
 </script>
 </body>
-</html>
+</html>

@@ -1,7 +1,11 @@
 /* ═══════════════════════════════════════════
    TRUTHCHECK — auth.js
-   Complete Authentication & User Session Manager
+   Unified Authentication via MongoDB Backend
+   (web + mobile share same user database)
 ═══════════════════════════════════════════ */
+
+/* ── BACKEND API URL ── */
+const API_BASE = 'https://fake-news-detection-zmkd.onrender.com/api';
 
 /* ── 25 LANGUAGES DEFINITION ── */
 const ALL_LANGUAGES = [
@@ -56,7 +60,6 @@ function validateEmail(email) {
 
 function validatePassword(password) {
   if (!password) return { valid: false, message: 'Password is required' };
-  
   const checks = {
     minLen: password.length >= 8,
     uppercase: /[A-Z]/.test(password),
@@ -65,14 +68,12 @@ function validatePassword(password) {
     special: /[!@#$%^&*()_+\-.\?]/.test(password),
     noSpaces: !/\s/.test(password)
   };
-
   if (!checks.noSpaces) return { valid: false, message: 'Password cannot contain spaces', checks };
   if (!checks.minLen) return { valid: false, message: 'Password too short (min 8 chars)', checks };
   if (!checks.uppercase) return { valid: false, message: 'Must contain at least 1 uppercase letter', checks };
   if (!checks.lowercase) return { valid: false, message: 'Must contain at least 1 lowercase letter', checks };
   if (!checks.number) return { valid: false, message: 'Must contain at least 1 number', checks };
   if (!checks.special) return { valid: false, message: 'Must contain at least 1 special character (!@#$%^&*()_+-...?)', checks };
-
   return { valid: true, message: '✓ Strong password', checks };
 }
 
@@ -82,124 +83,48 @@ function validateConfirmPassword(password, confirmPassword) {
   return { valid: true, message: '✓ Passwords match' };
 }
 
-/* ── LOCAL USER DATABASE ── */
-function getUsers() {
-  try { return JSON.parse(localStorage.getItem('tg_users') || '[]'); }
-  catch { return []; }
-}
-
-function saveUsers(users) {
-  try { localStorage.setItem('tg_users', JSON.stringify(users)); }
-  catch (e) { console.error('Error saving users', e); }
-}
-
-function findUserByInput(loginInput) {
-  const users = getUsers();
-  const lower = loginInput.trim().toLowerCase();
-  return users.find(u => u.username.toLowerCase() === lower || u.email.toLowerCase() === lower);
-}
-
-/* Simple hash function for client-side security demo */
-function hashPassword(pwd) {
-  let hash = 0;
-  for (let i = 0; i < pwd.length; i++) {
-    const char = pwd.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash |= 0;
-  }
-  return 'tg_' + Math.abs(hash).toString(16);
-}
-
-/* ── ACCOUNT CREATION ── */
-function registerUser(username, email, password, confirmPassword) {
-  const vUser = validateUsername(username);
-  if (!vUser.valid) return { success: false, message: vUser.message };
-
-  const vEmail = validateEmail(email);
-  if (!vEmail.valid) return { success: false, message: vEmail.message };
-
-  const vPwd = validatePassword(password);
-  if (!vPwd.valid) return { success: false, message: vPwd.message };
-
-  const vConf = validateConfirmPassword(password, confirmPassword);
-  if (!vConf.valid) return { success: false, message: vConf.message };
-
-  const users = getUsers();
-  const existingName = users.find(u => u.username.toLowerCase() === username.toLowerCase());
-  if (existingName) return { success: false, message: 'Username is already taken' };
-
-  const existingEmail = users.find(u => u.email.toLowerCase() === email.toLowerCase());
-  if (existingEmail) return { success: false, message: 'Email address is already registered' };
-
-  const newUser = {
-    id: 'usr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-    username: username.trim(),
-    email: email.trim(),
-    passwordHash: hashPassword(password),
-    avatar: '🛡️',
-    created: new Date().toISOString(),
-    verified: false,
-    searchesCount: 0
-  };
-
-  users.push(newUser);
-  saveUsers(users);
-
-  return { success: true, message: 'Account created successfully.' };
-}
-
-/* ── LOGIN & SESSION ── */
-function loginUser(loginInput, password, rememberMe = false) {
-  if (!loginInput || !password) {
-    return { success: false, message: 'Please enter username/email and password' };
-  }
-
-  const user = findUserByInput(loginInput);
-  if (!user) {
-    return { success: false, message: 'Invalid username/email or password.' };
-  }
-
-  if (user.passwordHash !== hashPassword(password)) {
-    return { success: false, message: 'Invalid username/email or password.' };
-  }
-
-  /* Store session */
-  const sessionData = {
-    userId: user.id,
-    loginTime: new Date().toISOString()
-  };
-
+/* ══════════════════════════════════════════════
+   SESSION — stored in localStorage as JWT token
+   User profile cached to avoid repeated API calls
+══════════════════════════════════════════════ */
+function saveSession(token, user, rememberMe) {
+  const data = JSON.stringify({ token, user });
   if (rememberMe) {
-    localStorage.setItem('tg_session', JSON.stringify(sessionData));
-    sessionStorage.removeItem('tg_session');
+    localStorage.setItem('tc_session', data);
+    sessionStorage.removeItem('tc_session');
   } else {
-    sessionStorage.setItem('tg_session', JSON.stringify(sessionData));
-    localStorage.removeItem('tg_session');
+    sessionStorage.setItem('tc_session', data);
+    localStorage.removeItem('tc_session');
   }
+  localStorage.setItem('token', token);
+  localStorage.setItem('auth_token', token);
+}
 
-  return { success: true, user, message: 'Login successful' };
+function getSession() {
+  try {
+    const raw = sessionStorage.getItem('tc_session') || localStorage.getItem('tc_session');
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch { return null; }
 }
 
 function getCurrentUser() {
-  let sessionRaw = sessionStorage.getItem('tg_session') || localStorage.getItem('tg_session');
-  if (!sessionRaw) return null;
+  const session = getSession();
+  return session ? session.user : null;
+}
 
-  try {
-    const session = JSON.parse(sessionRaw);
-    const users = getUsers();
-    return users.find(u => u.id === session.userId) || null;
-  } catch {
-    return null;
-  }
+function getAuthToken() {
+  const session = getSession();
+  return session ? session.token : null;
 }
 
 function logoutUser() {
-  localStorage.removeItem('tg_session');
-  sessionStorage.removeItem('tg_session');
+  localStorage.removeItem('tc_session');
+  sessionStorage.removeItem('tc_session');
+  localStorage.removeItem('token');
+  localStorage.removeItem('auth_token');
   showToast('Logged out successfully', 'info');
-  setTimeout(() => {
-    window.location.href = 'index.html';
-  }, 300);
+  setTimeout(() => { window.location.href = 'index.html'; }, 300);
 }
 
 /* ── SESSION PROTECTION ── */
@@ -222,124 +147,103 @@ function requireGuest() {
   return true;
 }
 
-/* ── PROFILE & ACCOUNT ACTIONS ── */
-function updateUserProfile(updates) {
-  const currentUser = getCurrentUser();
-  if (!currentUser) return { success: false, message: 'User not logged in' };
+/* ══════════════════════════════════════════════
+   REGISTRATION — calls Render backend → MongoDB
+══════════════════════════════════════════════ */
+async function registerUser(username, email, password, confirmPassword) {
+  const vUser = validateUsername(username);
+  if (!vUser.valid) return { success: false, message: vUser.message };
 
-  const users = getUsers();
-  const idx = users.findIndex(u => u.id === currentUser.id);
-  if (idx === -1) return { success: false, message: 'User not found' };
-
-  if (updates.username && updates.username !== currentUser.username) {
-    const vUser = validateUsername(updates.username);
-    if (!vUser.valid) return { success: false, message: vUser.message };
-    const exists = users.find(u => u.id !== currentUser.id && u.username.toLowerCase() === updates.username.toLowerCase());
-    if (exists) return { success: false, message: 'Username already taken' };
-    users[idx].username = updates.username;
-  }
-
-  if (updates.email && updates.email !== currentUser.email) {
-    const vEmail = validateEmail(updates.email);
-    if (!vEmail.valid) return { success: false, message: vEmail.message };
-    const exists = users.find(u => u.id !== currentUser.id && u.email.toLowerCase() === updates.email.toLowerCase());
-    if (exists) return { success: false, message: 'Email already registered' };
-    users[idx].email = updates.email;
-    users[idx].verified = false;
-  }
-
-  if (updates.avatar) users[idx].avatar = updates.avatar;
-
-  saveUsers(users);
-  return { success: true, message: 'Profile updated successfully', user: users[idx] };
-}
-
-function changeUserPassword(oldPassword, newPassword, confirmPassword) {
-  const currentUser = getCurrentUser();
-  if (!currentUser) return { success: false, message: 'User not logged in' };
-
-  if (currentUser.passwordHash !== hashPassword(oldPassword)) {
-    return { success: false, message: 'Current password is incorrect' };
-  }
-
-  const vPwd = validatePassword(newPassword);
-  if (!vPwd.valid) return { success: false, message: vPwd.message };
-
-  const vConf = validateConfirmPassword(newPassword, confirmPassword);
-  if (!vConf.valid) return { success: false, message: vConf.message };
-
-  const users = getUsers();
-  const idx = users.findIndex(u => u.id === currentUser.id);
-  if (idx !== -1) {
-    users[idx].passwordHash = hashPassword(newPassword);
-    saveUsers(users);
-  }
-
-  return { success: true, message: 'Password updated successfully' };
-}
-
-function verifyUserEmail() {
-  const currentUser = getCurrentUser();
-  if (!currentUser) return { success: false, message: 'User not logged in' };
-
-  const users = getUsers();
-  const idx = users.findIndex(u => u.id === currentUser.id);
-  if (idx !== -1) {
-    users[idx].verified = true;
-    saveUsers(users);
-  }
-  return { success: true, message: 'Email verified successfully!' };
-}
-
-function deleteUserAccount(password) {
-  const currentUser = getCurrentUser();
-  if (!currentUser) return { success: false, message: 'User not logged in' };
-
-  if (currentUser.passwordHash !== hashPassword(password)) {
-    return { success: false, message: 'Incorrect password. Account not deleted.' };
-  }
-
-  let users = getUsers();
-  users = users.filter(u => u.id !== currentUser.id);
-  saveUsers(users);
-
-  logoutUser();
-  return { success: true, message: 'Account permanently deleted' };
-}
-
-/* ── FORGOT PASSWORD FLOW ── */
-function requestPasswordReset(email) {
   const vEmail = validateEmail(email);
   if (!vEmail.valid) return { success: false, message: vEmail.message };
 
-  const user = findUserByInput(email);
-  if (!user) {
-    /* Security best practice: don't reveal user existence, show generic success message */
-    return { success: true, message: 'If an account exists for this email, password reset instructions have been sent.' };
+  const vPwd = validatePassword(password);
+  if (!vPwd.valid) return { success: false, message: vPwd.message };
+
+  const vConf = validateConfirmPassword(password, confirmPassword);
+  if (!vConf.valid) return { success: false, message: vConf.message };
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: username.trim(), email: email.trim(), password })
+    });
+    const data = await res.json();
+    if (data.success && data.user) {
+      return { success: true, message: 'Account created successfully!', user: data.user, token: data.token };
+    }
+    return { success: false, message: data.error || 'Registration failed. Please try again.' };
+  } catch (err) {
+    return { success: false, message: 'Network error. Please check your connection and try again.' };
+  }
+}
+
+/* ══════════════════════════════════════════════
+   LOGIN — calls Render backend → MongoDB
+══════════════════════════════════════════════ */
+async function loginUser(loginInput, password, rememberMe = false) {
+  if (!loginInput || !password) {
+    return { success: false, message: 'Please enter email and password' };
   }
 
-  return {
-    success: true,
-    resetToken: 'rst_' + Math.random().toString(36).substr(2, 8),
-    email: user.email,
-    message: 'Password reset link sent! Check your email inbox.'
-  };
+  try {
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: loginInput.trim(), password })
+    });
+    const data = await res.json();
+    if (data.success && data.user) {
+      saveSession(data.token, data.user, rememberMe);
+      return { success: true, user: data.user, message: 'Login successful' };
+    }
+    return { success: false, message: data.error || 'Invalid email or password.' };
+  } catch (err) {
+    return { success: false, message: 'Network error. Please check your connection and try again.' };
+  }
+}
+
+/* ── PROFILE UPDATE ── */
+async function updateUserProfile(updates) {
+  const currentUser = getCurrentUser();
+  const token = getAuthToken();
+  if (!currentUser || !token) return { success: false, message: 'User not logged in' };
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/user/${currentUser._id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify(updates)
+    });
+    const data = await res.json();
+    if (data.success) {
+      const session = getSession();
+      if (session) {
+        session.user = data.user;
+        const rememberMe = !!localStorage.getItem('tc_session');
+        saveSession(session.token, data.user, rememberMe);
+      }
+      return { success: true, message: 'Profile updated successfully', user: data.user };
+    }
+    return { success: false, message: data.error || 'Update failed' };
+  } catch (err) {
+    return { success: false, message: 'Network error.' };
+  }
+}
+
+/* ── FORGOT / RESET PASSWORD (client-side placeholder) ── */
+function requestPasswordReset(email) {
+  const vEmail = validateEmail(email);
+  if (!vEmail.valid) return { success: false, message: vEmail.message };
+  return { success: true, message: 'If an account exists for this email, password reset instructions have been sent.' };
 }
 
 function resetPasswordWithToken(email, newPassword, confirmPassword) {
   const vPwd = validatePassword(newPassword);
   if (!vPwd.valid) return { success: false, message: vPwd.message };
-
   const vConf = validateConfirmPassword(newPassword, confirmPassword);
   if (!vConf.valid) return { success: false, message: vConf.message };
-
-  const users = getUsers();
-  const idx = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
-  if (idx === -1) return { success: false, message: 'Account not found' };
-
-  users[idx].passwordHash = hashPassword(newPassword);
-  saveUsers(users);
-
   return { success: true, message: 'Password has been reset successfully. Please log in.' };
 }
 
@@ -355,22 +259,13 @@ function showToast(message, type = 'info') {
 
   const toast = document.createElement('div');
   toast.className = `tg-toast tg-toast-${type}`;
-  
-  const iconMap = {
-    success: '✓',
-    error: '✕',
-    warning: '!',
-    info: 'ℹ'
-  };
-
+  const iconMap = { success: '✓', error: '✕', warning: '!', info: 'ℹ' };
   toast.innerHTML = `
     <span class="tg-toast-icon">${iconMap[type] || 'ℹ'}</span>
     <span class="tg-toast-msg">${message}</span>
   `;
-
   container.appendChild(toast);
   setTimeout(() => toast.classList.add('visible'), 10);
-
   setTimeout(() => {
     toast.classList.remove('visible');
     setTimeout(() => toast.remove(), 300);
@@ -386,7 +281,7 @@ function renderNavbarUser() {
   let existingCta = navContainer.querySelector('#nav-auth-container');
   if (!existingCta) existingCta = navContainer.querySelector('.nav-user-wrapper');
   if (!existingCta) existingCta = navContainer.querySelector('.nav-cta');
-  
+
   const navLinksContainer = navContainer.querySelector('.nav-links');
   const themeToggle = navContainer.querySelector('#theme-toggle-btn');
 
@@ -396,16 +291,11 @@ function renderNavbarUser() {
         <a href="verify.html" class="nav-link">Verify</a>
         <a href="trending.html" class="nav-link">Trending</a>
       `;
-      const links = navLinksContainer.querySelectorAll('.nav-link');
-      links.forEach(link => {
-         if(window.location.href.includes(link.getAttribute('href'))) {
-            link.classList.add('active');
-         }
+      navLinksContainer.querySelectorAll('.nav-link').forEach(link => {
+        if (window.location.href.includes(link.getAttribute('href'))) link.classList.add('active');
       });
     }
-    if (themeToggle) {
-      themeToggle.style.display = 'flex';
-    }
+    if (themeToggle) themeToggle.style.display = 'flex';
 
     const wrapper = document.createElement('div');
     wrapper.className = 'nav-user-wrapper';
@@ -436,26 +326,18 @@ function renderNavbarUser() {
     if (existingCta) existingCta.replaceWith(wrapper);
     else navContainer.appendChild(wrapper);
 
-    /* Setup click toggle */
     const btn = document.getElementById('nav-user-dropdown-btn');
     const menu = document.getElementById('nav-user-menu');
     if (btn && menu) {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        menu.classList.toggle('active');
-      });
+      btn.addEventListener('click', (e) => { e.stopPropagation(); menu.classList.toggle('active'); });
       document.addEventListener('click', () => menu.classList.remove('active'));
     }
   } else {
     if (navLinksContainer) {
-      navLinksContainer.innerHTML = `
-        <a href="index.html" class="nav-link">Home</a>
-      `;
+      navLinksContainer.innerHTML = `<a href="index.html" class="nav-link">Home</a>`;
     }
-    if (themeToggle) {
-      themeToggle.style.display = 'flex';
-    }
-    
+    if (themeToggle) themeToggle.style.display = 'flex';
+
     const cta = document.createElement('div');
     cta.className = 'nav-auth-buttons';
     cta.id = 'nav-auth-container';
@@ -488,7 +370,6 @@ function initTheme() {
   const isLight = localStorage.getItem('tc_theme') === 'light';
   if (isLight) document.body.classList.add('light-theme');
   updateThemeIcon(isLight);
-
   const btn = document.getElementById('theme-toggle-btn');
   if (btn) btn.addEventListener('click', toggleTheme);
 }
@@ -497,8 +378,6 @@ function initTheme() {
 document.addEventListener('DOMContentLoaded', () => {
   renderNavbarUser();
   initTheme();
-  
-  /* Check query parameter for auth messages */
   const params = new URLSearchParams(window.location.search);
   if (params.get('auth_required') === '1') {
     showToast('Please log in to access that page.', 'warning');

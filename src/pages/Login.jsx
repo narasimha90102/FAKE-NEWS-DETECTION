@@ -26,11 +26,11 @@ const Login = () => {
     }
   }, [location, user, navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const res = login(email, password, rememberMe);
+    const res = await login(email, password, rememberMe);
     setLoading(false);
 
     if (res.success) {

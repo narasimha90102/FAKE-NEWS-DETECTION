@@ -75,29 +75,17 @@ function clearResult() {
 }
 
 function saveToHistory() {
+  /* Results are auto-saved on every analysis. Show feedback only. */
   const verdict = document.getElementById('rcv-verdict');
-  const score   = document.getElementById('score-ring-num');
-  const input   = document.getElementById('verify-input');
-  const lang    = document.getElementById('lang-select');
-
-  if (!verdict || !verdict.textContent || verdict.textContent === '--') return;
-
-  const now = new Date();
-
-  addToHistory({
-    text:    input ? (input.value.length > 80 ? input.value.substring(0,80)+'…' : input.value) : '',
-    score:   parseInt(score?.textContent) || 0,
-    verdict: verdict.textContent,
-    lang:    lang ? lang.options[lang.selectedIndex].text.split(' ')[0] : 'English',
-    langCode: lang ? lang.value : 'en',
-    date:    now.toISOString(),
-    day:     now.toLocaleDateString('en-IN',{weekday:'short'}),
-    time:    now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})
-  });
+  if (!verdict || !verdict.textContent || verdict.textContent === '--') {
+    if (typeof showToast === 'function') showToast('Run an analysis first before saving.', 'warning');
+    return;
+  }
 
   const btn = document.querySelector('.rc-action.primary');
   if (btn) {
-    btn.textContent = 'Saved ✓';
+    btn.textContent = 'Already Saved ✓';
+    if (typeof showToast === 'function') showToast('Result already saved to your history automatically!', 'success');
     setTimeout(() => { btn.textContent = 'Save to History'; }, 2000);
   }
 }
@@ -296,6 +284,31 @@ async function analyzeContent() {
 
     /* Display final result */
     displayResult(finalResult);
+
+    /* ── Auto-save every analysis to history for real dashboard stats ── */
+    try {
+      const inputEl  = document.getElementById('verify-input');
+      const langEl   = document.getElementById('lang-select');
+      const now      = new Date();
+      const rawText  = inputEl ? inputEl.value.trim() : '';
+      const langCode = langEl ? langEl.value : 'en';
+      const langName = langNames[langCode] || 'English';
+
+      if (rawText && finalResult.verdict) {
+        addToHistory({
+          text:     rawText.length > 80 ? rawText.substring(0, 80) + '…' : rawText,
+          score:    finalResult.score,
+          verdict:  finalResult.verdict,
+          lang:     langName,
+          langCode: langCode,
+          date:     now.toISOString(),
+          day:      now.toLocaleDateString('en-IN', { weekday: 'short' }),
+          time:     now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })
+        });
+      }
+    } catch (e) {
+      console.warn('History auto-save skipped:', e);
+    }
 
     /* Always reset button loading state */
     if (btn) btn.disabled = false;
@@ -499,7 +512,7 @@ function renderDashboard() {
   const misCount   = h.filter(i => i.verdict === 'MISLEADING').length;
   const satCount   = h.filter(i => i.verdict === 'SATIRE').length;
   const unvCount   = h.filter(i => i.verdict === 'UNVERIFIED').length;
-  const fakeRate   = total > 0 ? ((fakeCount / total) * 100).toFixed(1) + '%' : '0%';
+  const fakeRate   = total > 0 ? ((fakeCount / total) * 100).toFixed(1) + '%' : '0.0%';
 
   /* ── KPI Cards ── */
   const kpiTotal    = document.getElementById('kpi-total');
